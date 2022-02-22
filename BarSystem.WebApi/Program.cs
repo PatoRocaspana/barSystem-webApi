@@ -1,8 +1,16 @@
+using BarSystem.WebApi.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddDbContext<BarSystemDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("name=ConnectionStrings:Database"));
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

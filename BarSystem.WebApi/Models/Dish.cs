@@ -1,7 +1,7 @@
-﻿using BarSystem.Models.Enum;
-using BarSystem.WebApi.Models.Base;
+﻿using BarSystem.WebApi.Models.Base;
+using BarSystem.WebApi.Models.Enum;
 
-namespace BarSystem.Models
+namespace BarSystem.WebApi.Models
 {
     public class Dish : Product
     {

@@ -1,4 +1,4 @@
-﻿namespace BarSystem.Models.Base
+﻿namespace BarSystem.WebApi.Models.Base
 {
     public class Entity
     {

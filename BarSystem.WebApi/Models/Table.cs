@@ -1,7 +1,6 @@
-﻿using BarSystem.Models.Base;
-using BarSystem.WebApi.Models;
+﻿using BarSystem.WebApi.Models.Base;
 
-namespace BarSystem.Models
+namespace BarSystem.WebApi.Models
 {
     public class Table : Entity
     {

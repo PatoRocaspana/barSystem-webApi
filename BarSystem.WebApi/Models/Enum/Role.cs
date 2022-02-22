@@ -1,4 +1,4 @@
-﻿namespace BarSystem.Models.Enum
+﻿namespace BarSystem.WebApi.Models.Enum
 {
     public enum Role
     {

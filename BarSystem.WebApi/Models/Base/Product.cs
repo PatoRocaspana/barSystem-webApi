@@ -1,6 +1,4 @@
-﻿using BarSystem.Models.Base;
-
-namespace BarSystem.WebApi.Models.Base
+﻿namespace BarSystem.WebApi.Models.Base
 {
     public abstract class Product : Entity
     {

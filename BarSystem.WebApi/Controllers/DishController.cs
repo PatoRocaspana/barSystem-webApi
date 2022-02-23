@@ -16,7 +16,12 @@ namespace BarSystem.WebApi.Controllers
             _dishRepository = dishRepository;
         }
 
-        // GET: api/Dish
+        /// <summary>
+        /// Get all possible dishes.
+        /// </summary>
+        /// <returns>The list of dishes</returns>
+        /// <response code="200">Returns the list of dishes</response>
+        /// <response code="404">Dishes List not found</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DishDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -33,7 +38,13 @@ namespace BarSystem.WebApi.Controllers
             return Ok(dishDtoList);
         }
 
-        // GET: api/Dish/5
+        /// <summary>
+        /// Get dish by id.
+        /// </summary>
+        /// <param name="id">Id of the dish</param>
+        /// <returns>The requested dish</returns>
+        /// <response code="200">Returns the dish</response>
+        /// <response code="404">Dish was not found</response>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DishDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -49,7 +60,13 @@ namespace BarSystem.WebApi.Controllers
             return Ok(dishDto);
         }
 
-        // POST: api/Dish
+        /// <summary>
+        /// Create a new Dish.
+        /// </summary>
+        /// <param name="dishDto">The new dish</param>
+        /// <returns>The dish created</returns>
+        /// <response code="200">Returns the dish created</response>
+        /// <response code="400">Dish is null</response>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(DishDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -67,7 +84,14 @@ namespace BarSystem.WebApi.Controllers
             return Ok(dishDtoCreated);
         }
 
-        //// PUT: api/Dish/5
+        /// <summary>
+        /// Update a Dish.
+        /// </summary>
+        /// <param name="dishDto">New dish data</param>
+        /// <param name="id">Dish id to update</param>
+        /// <returns>The dish updated</returns>
+        /// <response code="200">Returns the dish updated.</response>
+        /// <response code="404">Dish not found</response>
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DishDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -90,7 +114,12 @@ namespace BarSystem.WebApi.Controllers
             return Ok(dishDtoUpdated);
         }
 
-        //// DELETE: api/Dish/5
+        /// <summary>
+        /// Create a new Dish.
+        /// </summary>
+        /// <param name="id">Dish id to delete</param>
+        /// <response code="204">Dish deleted succesfully</response>
+        /// <response code="404">Dish not found</response>
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpDelete("{id}")]

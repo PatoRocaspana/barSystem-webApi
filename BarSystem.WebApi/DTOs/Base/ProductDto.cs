@@ -1,6 +1,4 @@
-﻿using BarSystem.WebApi.Models.Base;
-
-namespace BarSystem.WebApi.DTOs.Base
+﻿namespace BarSystem.WebApi.DTOs.Base
 {
     public class ProductDto : EntityDto
     {

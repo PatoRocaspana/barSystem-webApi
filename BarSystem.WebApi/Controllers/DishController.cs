@@ -1,6 +1,5 @@
 ﻿using BarSystem.WebApi.DTOs;
 using BarSystem.WebApi.Interfaces.Data;
-using BarSystem.WebApi.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BarSystem.WebApi.Controllers
@@ -65,8 +64,22 @@ namespace BarSystem.WebApi.Controllers
         /// </summary>
         /// <param name="dishDto">The new dish</param>
         /// <returns>The dish created</returns>
+        /// /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /DishDto
+        ///     {
+        ///         "name": "Crazy Steak",
+        ///         "description": "Steak with Mushroom Sauce",
+        ///         "price": 1390,
+        ///         "stock": 23,
+        ///         "category": 0,
+        ///         "estimatedTime": "00:35:00",
+        ///         "isReady": false
+        ///     }
+        /// </remarks>
         /// <response code="200">Returns the dish created</response>
-        /// <response code="400">Dish is null</response>
+        /// <response code="400">Invalid Dish</response>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(DishDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

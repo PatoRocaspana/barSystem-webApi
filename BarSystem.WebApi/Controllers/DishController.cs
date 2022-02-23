@@ -64,10 +64,10 @@ namespace BarSystem.WebApi.Controllers
         /// </summary>
         /// <param name="dishDto">The new dish</param>
         /// <returns>The dish created</returns>
-        /// /// <remarks>
+        /// <remarks>
         /// Sample request:
         ///
-        ///     POST /DishDto
+        ///     POST /Dish
         ///     {
         ///         "name": "Crazy Steak",
         ///         "description": "Steak with Mushroom Sauce",

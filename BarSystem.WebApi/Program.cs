@@ -1,12 +1,16 @@
 using BarSystem.WebApi.Data;
 using BarSystem.WebApi.Interfaces.Data;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+                .AddFluentValidation(s => { s.RegisterValidatorsFromAssemblyContaining<Program>(); });
+
+
 builder.Services.AddDbContext<BarSystemDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("Database"));

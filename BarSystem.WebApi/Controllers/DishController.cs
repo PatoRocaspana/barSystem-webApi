@@ -115,7 +115,7 @@ namespace BarSystem.WebApi.Controllers
         }
 
         /// <summary>
-        /// Create a new Dish.
+        /// Delete a Dish.
         /// </summary>
         /// <param name="id">Dish id to delete</param>
         /// <response code="204">Dish deleted succesfully</response>

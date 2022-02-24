@@ -83,7 +83,7 @@ namespace BarSystem.WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(DishDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> PostAsync(DishDto dishDto)
+        public async Task<IActionResult> PostAsync([FromBody] DishDto dishDto)
         {
             var dishEntity = dishDto.ToDishEntity(dishDto);
 
@@ -93,8 +93,10 @@ namespace BarSystem.WebApi.Controllers
                 return BadRequest();
 
             var dishDtoCreated = new DishDto(dishCreated);
-
-            return Ok(dishDtoCreated);
+            
+            return CreatedAtAction(nameof(GetAsync), new { id = dishDtoCreated.Id }, dishDtoCreated);
+            
+            //return Ok(dishDtoCreated);
         }
 
         /// <summary>

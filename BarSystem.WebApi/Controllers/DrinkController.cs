@@ -66,13 +66,14 @@ namespace BarSystem.WebApi.Controllers
         /// <returns>The drink created</returns>
         /// <remarks>
         /// Sample request:
+        /// 
         ///     POST /Drink
         ///     {
         ///         "name": "GinTonic",
         ///         "description": "Gin with Tonic Water",
         ///         "price": 575,
         ///         "stock": 64,
-        ///         "category": 4,
+        ///         "category": 4
         ///     }
         /// </remarks>
         /// <response code="200">Returns the drink created</response>
@@ -80,7 +81,7 @@ namespace BarSystem.WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(DrinkDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> PostAsync(DrinkDto drinkDto)
+        public async Task<IActionResult> PostAsync([FromBody] DrinkDto drinkDto)
         {
             var drinkEntity = drinkDto.ToDrinkEntity(drinkDto);
 

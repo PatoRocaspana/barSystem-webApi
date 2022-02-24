@@ -66,12 +66,13 @@ namespace BarSystem.WebApi.Controllers
         /// <returns>The employee created</returns>
         /// <remarks>
         /// Sample request:
+        /// 
         ///     POST /Employee
         ///     {
         ///         "firstname": "Johny",
         ///         "lastname": "Bravo",
         ///         "dni": 33888575,
-        ///         "role": 1,
+        ///         "role": 1
         ///     }
         /// </remarks>
         /// <response code="201">Returns the employee created</response>
@@ -79,7 +80,7 @@ namespace BarSystem.WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(EmployeeDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> PostAsync(EmployeeDto employeeDto)
+        public async Task<IActionResult> PostAsync([FromBody] EmployeeDto employeeDto)
         {
             var employeeEntity = employeeDto.ToEmployeeEntity(employeeDto);
 

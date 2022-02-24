@@ -101,9 +101,11 @@ namespace BarSystem.WebApi.Controllers
         /// <param name="id">Employee id to update</param>
         /// <returns>The employee updated</returns>
         /// <response code="200">Returns the employee updated.</response>
+        /// <response code="400">Invalid Employee</response>
         /// <response code="404">Employee not found</response>
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(EmployeeDto))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> PutAsync([FromBody] EmployeeDto employeeDto, int id)
         {

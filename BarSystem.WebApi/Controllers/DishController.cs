@@ -106,9 +106,11 @@ namespace BarSystem.WebApi.Controllers
         /// <param name="id">Dish id to update</param>
         /// <returns>The dish updated</returns>
         /// <response code="200">Returns the dish updated.</response>
+        /// <response code="400">Invalid Dish</response>
         /// <response code="404">Dish not found</response>
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DishDto))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> PutAsync([FromBody] DishDto dishDto, int id)
         {

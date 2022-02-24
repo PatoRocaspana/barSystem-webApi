@@ -102,9 +102,11 @@ namespace BarSystem.WebApi.Controllers
         /// <param name="id">Drink id to update</param>
         /// <returns>The drink updated</returns>
         /// <response code="200">Returns the drink updated.</response>
+        /// <response code="400">Invalid Drink</response>
         /// <response code="404">Drink not found</response>
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DrinkDto))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> PutAsync([FromBody] DrinkDto drinkDto, int id)
         {

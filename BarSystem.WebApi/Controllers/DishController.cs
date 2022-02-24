@@ -24,7 +24,7 @@ namespace BarSystem.WebApi.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DishDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetAsync()
+        public async Task<IActionResult> Get()
         {
             var dishEntityList = await _dishRepository.GetAllAsync();
 
@@ -47,7 +47,7 @@ namespace BarSystem.WebApi.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DishDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetAsync(int id)
+        public async Task<IActionResult> Get(int id)
         {
             var dishEntity = await _dishRepository.GetAsync(id);
 
@@ -83,7 +83,7 @@ namespace BarSystem.WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(DishDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> PostAsync([FromBody] DishDto dishDto)
+        public async Task<IActionResult> Post([FromBody] DishDto dishDto)
         {
             var dishEntity = dishDto.ToDishEntity(dishDto);
 
@@ -94,9 +94,7 @@ namespace BarSystem.WebApi.Controllers
 
             var dishDtoCreated = new DishDto(dishCreated);
             
-            return CreatedAtAction(nameof(GetAsync), new { id = dishDtoCreated.Id }, dishDtoCreated);
-            
-            //return Ok(dishDtoCreated);
+            return CreatedAtAction(nameof(Get), new { id = dishDtoCreated.Id }, dishDtoCreated);
         }
 
         /// <summary>
@@ -112,7 +110,7 @@ namespace BarSystem.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DishDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> PutAsync([FromBody] DishDto dishDto, int id)
+        public async Task<IActionResult> Put([FromBody] DishDto dishDto, int id)
         {
             var dniExist = await _dishRepository.EntityExistsAsync(id);
 
@@ -140,7 +138,7 @@ namespace BarSystem.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var dishExists = await _dishRepository.EntityExistsAsync(id);
 

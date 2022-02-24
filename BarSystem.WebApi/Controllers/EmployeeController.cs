@@ -24,7 +24,7 @@ namespace BarSystem.WebApi.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<EmployeeDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetAsync()
+        public async Task<IActionResult> Get()
         {
             var employeeEntityList = await _employeeRepository.GetAllAsync();
 
@@ -47,7 +47,7 @@ namespace BarSystem.WebApi.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(EmployeeDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetAsync(int id)
+        public async Task<IActionResult> Get(int id)
         {
             var employeeEntity = await _employeeRepository.GetAsync(id);
 
@@ -69,9 +69,9 @@ namespace BarSystem.WebApi.Controllers
         /// 
         ///     POST /Employee
         ///     {
-        ///         "firstname": "Johny",
-        ///         "lastname": "Bravo",
-        ///         "dni": 33888575,
+        ///         "firstName": "Johny",
+        ///         "lastName": "Bravo",
+        ///         "dni": "33888575",
         ///         "role": 1
         ///     }
         /// </remarks>
@@ -80,7 +80,7 @@ namespace BarSystem.WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(EmployeeDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> PostAsync([FromBody] EmployeeDto employeeDto)
+        public async Task<IActionResult> Post([FromBody] EmployeeDto employeeDto)
         {
             var employeeEntity = employeeDto.ToEmployeeEntity(employeeDto);
 
@@ -91,7 +91,7 @@ namespace BarSystem.WebApi.Controllers
 
             var employeeDtoCreated = new EmployeeDto(employeeCreated);
 
-            return Ok(employeeDtoCreated);  
+            return CreatedAtAction(nameof(Get), new { id = employeeDtoCreated.Id }, employeeDtoCreated);
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace BarSystem.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(EmployeeDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> PutAsync([FromBody] EmployeeDto employeeDto, int id)
+        public async Task<IActionResult> Put([FromBody] EmployeeDto employeeDto, int id)
         {
             var dniExist = await _employeeRepository.EntityExistsAsync(id);
 
@@ -135,7 +135,7 @@ namespace BarSystem.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var employeeExists = await _employeeRepository.EntityExistsAsync(id);
 

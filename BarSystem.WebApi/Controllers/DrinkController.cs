@@ -24,7 +24,7 @@ namespace BarSystem.WebApi.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DrinkDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetAsync()
+        public async Task<IActionResult> Get()
         {
             var drinkEntityList = await _drinkRepository.GetAllAsync();
 
@@ -47,7 +47,7 @@ namespace BarSystem.WebApi.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DrinkDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetAsync(int id)
+        public async Task<IActionResult> Get(int id)
         {
             var drinkEntity = await _drinkRepository.GetAsync(id);
 
@@ -81,7 +81,7 @@ namespace BarSystem.WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(DrinkDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> PostAsync([FromBody] DrinkDto drinkDto)
+        public async Task<IActionResult> Post([FromBody] DrinkDto drinkDto)
         {
             var drinkEntity = drinkDto.ToDrinkEntity(drinkDto);
 
@@ -92,7 +92,7 @@ namespace BarSystem.WebApi.Controllers
 
             var drinkDtoCreated = new DrinkDto(drinkCreated);
 
-            return Ok(drinkDtoCreated);
+            return CreatedAtAction(nameof(Get), new { id = drinkDtoCreated.Id }, drinkDtoCreated);
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace BarSystem.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DrinkDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> PutAsync([FromBody] DrinkDto drinkDto, int id)
+        public async Task<IActionResult> Put([FromBody] DrinkDto drinkDto, int id)
         {
             var dniExist = await _drinkRepository.EntityExistsAsync(id);
 
@@ -136,7 +136,7 @@ namespace BarSystem.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var drinkExists = await _drinkRepository.EntityExistsAsync(id);
 

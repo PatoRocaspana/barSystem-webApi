@@ -112,9 +112,12 @@ namespace BarSystem.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Put([FromBody] DishDto dishDto, int id)
         {
+            if (dishDto.Id != id)
+                return BadRequest();
+
             var dniExist = await _dishRepository.EntityExistsAsync(id);
 
-            if (!dniExist || dishDto.Id != id)
+            if (!dniExist)
                 return NotFound();
 
             var dishEntity = dishDto.ToDishEntity(dishDto);

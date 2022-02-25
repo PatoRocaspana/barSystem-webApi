@@ -29,17 +29,10 @@ namespace BarSystem.WebApi.Tests.ControllersTests
             var dish = new Dish()
             {
                 Name = "Crazy Steak",
-                Description = "Steak with Mushroom Sauce",
-                Price = 100,
-                Stock = 10,
-                Category = 0,
-                EstimatedTime = TimeSpan.FromMinutes(35),
-                IsReady = false
             };
 
             var dishList = new List<Dish>
             {
-                dish,
                 dish,
                 dish
             };
@@ -83,13 +76,8 @@ namespace BarSystem.WebApi.Tests.ControllersTests
             //Arrange
             var dish = new Dish()
             {
+                Id = 1,
                 Name = "Crazy Steak",
-                Description = "Steak with Mushroom Sauce",
-                Price = 100,
-                Stock = 10,
-                Category = 0,
-                EstimatedTime = TimeSpan.FromMinutes(35),
-                IsReady = false
             };
 
             _mockDishRepository.Setup(r => r.GetAsync(dish.Id)).ReturnsAsync(dish);
@@ -109,75 +97,164 @@ namespace BarSystem.WebApi.Tests.ControllersTests
         [Fact]
         public async Task Get_ReturnsNotFound_WhenDishNoExists()
         {
-            //arrange
+            //Arrange
             var dishId = 2;
 
             _mockDishRepository.Setup(r => r.GetAsync(dishId)).ReturnsAsync((Dish)null);
 
-            //act
+            //Act
             var result = await _dishController.Get(dishId);
 
-            //assert
+            //Assert
             Assert.NotNull(result);
             var objectResult = Assert.IsType<NotFoundResult>(result);
-            _mockDishRepository.Verify(r => r.GetAsync(dishId), Times.Never);
+            _mockDishRepository.Verify(r => r.GetAsync(dishId), Times.Once);
         }
 
         [Fact]
         public async Task Post_ReturnsDishDto_WhenSucces()
         {
-            //arrange
+            //Arrange
             var dishDto = new DishDto()
             {
                 Name = "Crazy Steak",
-                Description = "Steak with Mushroom Sauce",
-                Price = 100,
-                Stock = 10,
-                Category = 0,
-                EstimatedTime = TimeSpan.FromMinutes(35),
-                IsReady = false
             };
 
             var dish = new Dish()
             {
                 Id = 1,
                 Name = "Crazy Steak",
-                Description = "Steak with Mushroom Sauce",
-                Price = 100,
-                Stock = 10,
-                Category = 0,
-                EstimatedTime = TimeSpan.FromMinutes(35),
-                IsReady = false
             };
 
-            _mockDishRepository.Setup(r => r.CreateAsync(It.Is<Dish>(d => d.Id == dish.Id))).ReturnsAsync(dish);
+            _mockDishRepository.Setup(r => r.CreateAsync(It.Is<Dish>(d => d.Name == dishDto.Name))).ReturnsAsync(dish);
 
-            //act
+            //Act
             var result = await _dishController.Post(dishDto);
 
-            //assert
+            //Assert
             Assert.NotNull(result);
-            var objectResult = Assert.IsType<OkObjectResult>(result);
+            var objectResult = Assert.IsType<CreatedAtActionResult>(result);
             var dishDtoCreated = Assert.IsType<DishDto>(objectResult.Value);
-            Assert.Equal(dishDto.Id, dishDtoCreated.Id);
-            _mockDishRepository.Verify(r => r.CreateAsync(It.Is<Dish>(d => d.Id == dish.Id)), Times.Once);
+            Assert.Equal(dish.Id, dishDtoCreated.Id);
+            Assert.Equal(dish.Name, dishDtoCreated.Name);
+            _mockDishRepository.Verify(r => r.CreateAsync(It.IsAny<Dish>()), Times.Once);
         }
 
         [Fact]
         public async Task Post_ReturnsBadRequest_WhenErrors()
         {
-            //arrange
+            //Arrange
             var dishDto = new DishDto();
 
             _mockDishRepository.Setup(r => r.CreateAsync(It.IsAny<Dish>())).ReturnsAsync((Dish)null);
 
-            //act
+            //Act
             var result = await _dishController.Post(dishDto);
 
-            //assert
+            //Assert
             Assert.NotNull(result);
             var objectResult = Assert.IsType<BadRequestResult>(result);
             _mockDishRepository.Verify(r => r.CreateAsync(It.IsAny<Dish>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task Put_ReturnsUpdatedDishDto_WhenExists()
+        {
+            //Arrange
+            var dishDto = new DishDto()
+            {
+                Id = 1,
+                Name = "Storm Barbacue",
+            };
+
+            var dish = new Dish()
+            {
+                Id = 1,
+                Name = "Storm Barbacue",
+            };
+
+            _mockDishRepository.Setup(r => r.UpdateAsync(It.Is<Dish>(d => d.Id == dish.Id), dish.Id))
+                                            .ReturnsAsync(dish);
+            _mockDishRepository.Setup(r => r.EntityExistsAsync(dish.Id)).ReturnsAsync(true);
+
+            //Act
+            var result = await _dishController.Put(dishDto, dishDto.Id);
+
+            //Assert
+            Assert.NotNull(result);
+            var objectResult = Assert.IsType<OkObjectResult>(result);
+            var dishDtoUpdated = Assert.IsType<DishDto>(objectResult.Value);
+            Assert.Equal(dishDto.Id, dishDtoUpdated.Id);
+            Assert.Equal(dishDto.Name, dishDtoUpdated.Name);
+            _mockDishRepository.Verify(r => r.UpdateAsync(It.Is<Dish>(d => d.Id == dish.Id), dish.Id), Times.Once);
+            _mockDishRepository.Verify(r => r.EntityExistsAsync(dish.Id), Times.Once);
+        }
+
+        [Fact]
+        public async Task Put_ReturnsNotFound_WhenNoExists()
+        {
+            //Arrange
+            var dishDto = new DishDto()
+            {
+                Id = 1,
+                Name = "Storm Barbacue",
+            };
+
+            _mockDishRepository.Setup(r => r.UpdateAsync(It.Is<Dish>(cl => cl.Id == dishDto.Id), dishDto.Id)).ReturnsAsync(new Dish());
+            _mockDishRepository.Setup(r => r.EntityExistsAsync(dishDto.Id)).ReturnsAsync(false);
+
+            //Act
+            var resultQuery = await _dishController.Put(dishDto, dishDto.Id);
+
+            //Assert
+            Assert.NotNull(resultQuery);
+            var objectResult = Assert.IsType<NotFoundResult>(resultQuery);
+            _mockDishRepository.Verify(r => r.EntityExistsAsync(dishDto.Id), Times.Once);
+            _mockDishRepository.Verify(r => r.UpdateAsync(It.Is<Dish>(cl => cl.Id == dishDto.Id), dishDto.Id), Times.Never);
+        }
+
+        [Fact]
+        public async Task Put_ReturnsNotFound_WhenIdsNoMatch()
+        {
+            //Arrange
+            var dishDto = new DishDto()
+            {
+                Id = 1,
+                Name = "Storm Barbacue",
+            };
+
+            var otherId = 2;
+
+            _mockDishRepository.Setup(r => r.UpdateAsync(It.Is<Dish>(cl => cl.Id == dishDto.Id), otherId)).ReturnsAsync(new Dish());
+            _mockDishRepository.Setup(r => r.EntityExistsAsync(dishDto.Id)).ReturnsAsync(true);
+
+            //Act
+            var resultQuery = await _dishController.Put(dishDto, otherId);
+
+            //Assert
+            Assert.NotNull(resultQuery);
+            var objectResult = Assert.IsType<BadRequestResult>(resultQuery);
+            _mockDishRepository.Verify(r => r.EntityExistsAsync(dishDto.Id), Times.Never);
+            _mockDishRepository.Verify(r => r.UpdateAsync(It.Is<Dish>(cl => cl.Id == dishDto.Id), otherId), Times.Never);
+        }
+
+        [Fact]
+        public async Task Delete_ReturnsNoContent()
+        {
+            //arrange
+            var dishId = 1;
+
+            _mockDishRepository.Setup(r => r.EntityExistsAsync(dishId)).ReturnsAsync(true);
+            _mockDishRepository.Setup(r => r.DeleteAsync(dishId));
+
+            //act
+            var resultQuery = await _dishController.Delete(dishId);
+
+            //assert
+            Assert.NotNull(resultQuery);
+            var objectResult = Assert.IsType<NoContentResult>(resultQuery);
+            _mockDishRepository.Verify(r => r.EntityExistsAsync(dishId), Times.Once);
+            _mockDishRepository.Verify(r => r.DeleteAsync(dishId), Times.Once);
         }
     }
 }

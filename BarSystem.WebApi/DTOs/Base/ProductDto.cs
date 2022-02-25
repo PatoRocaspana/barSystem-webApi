@@ -1,6 +1,6 @@
 ﻿namespace BarSystem.WebApi.DTOs.Base
 {
-    public class ProductDto : EntityDto
+    public abstract class ProductDto : EntityDto
     {
         public string Name { get; set; }
         public string Description { get; set; }

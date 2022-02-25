@@ -4,13 +4,11 @@ using FluentValidation;
 
 namespace BarSystem.WebApi.Validations
 {
-    public class DrinkDtoValidator : AbstractValidator<DrinkDto>
+    public class DrinkDtoValidator : ProductDtoValidator<DrinkDto>
     {
         public DrinkDtoValidator()
         {
-            Include(new ProductDtoValidator());
-
-            RuleFor(prop => prop.Category)
+            RuleFor(drink => drink.Category)
                                     .IsInEnum();
         }
     }

@@ -3,22 +3,25 @@ using FluentValidation;
 
 namespace BarSystem.WebApi.Validations.Base
 {
-    public class ProductDtoValidator : AbstractValidator<ProductDto>
+    public abstract class ProductDtoValidator<T> : AbstractValidator<T> where T : ProductDto
     {
         public ProductDtoValidator()
         {
-            RuleFor(prop => prop.Name)
+            RuleFor(product => product.Id)
+                                    .GreaterThanOrEqualTo(0);
+
+            RuleFor(product => product.Name)
                                     .Cascade(CascadeMode.Stop)
                                     .NotEmpty()
                                     .Length(2, 30);
 
-            RuleFor(prop => prop.Description)
+            RuleFor(product => product.Description)
                                     .MaximumLength(200);
 
-            RuleFor(prop => prop.Price)
+            RuleFor(product => product.Price)
                                     .GreaterThan(0);
 
-            RuleFor(prop => prop.Stock)
+            RuleFor(product => product.Stock)
                                     .GreaterThanOrEqualTo(0);
         }
     }

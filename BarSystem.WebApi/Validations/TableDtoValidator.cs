@@ -7,20 +7,20 @@ namespace BarSystem.WebApi.Validations
     {
         public TableDtoValidator()
         {
-            RuleFor(prop => prop.WaiterDto)
+            RuleFor(table => table.WaiterDto)
                                     .SetValidator(new EmployeeDtoValidator());
 
-            RuleFor(prop => prop.AmountPeople)
+            RuleFor(table => table.AmountPeople)
                                     .GreaterThan(1);
 
-            RuleForEach(prop => prop.DrinksDto)
+            RuleForEach(table => table.DrinksDto)
                                         .SetValidator(new DrinkDtoValidator());
 
-            RuleForEach(prop => prop.DishesDto)
+            RuleForEach(table => table.DishesDto)
                                         .SetValidator(new DishDtoValidator());
 
-            RuleFor(prop => prop.TotalPrice)
-                                    .GreaterThanOrEqualTo(0);
+            RuleFor(table => table.TotalPrice)
+                                    .GreaterThanOrEqualTo(0).When(prop => prop.DishesDto.Any() || prop.DrinksDto.Any());
 
         }
     }

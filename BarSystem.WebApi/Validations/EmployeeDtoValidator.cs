@@ -7,22 +7,22 @@ namespace BarSystem.WebApi.Validations
     {
         public EmployeeDtoValidator()
         {
-            RuleFor(prop => prop.Dni)
+            RuleFor(employee => employee.Dni)
                         .Cascade(CascadeMode.Stop)
                         .Length(7, 9)
                         .Matches("^[0-9]+$");
 
-            RuleFor(prop => prop.FirstName)
+            RuleFor(employee => employee.FirstName)
                         .Cascade(CascadeMode.Stop)
                         .NotEmpty()
                         .Length(2, 15);
 
-            RuleFor(prop => prop.LastName)
+            RuleFor(employee => employee.LastName)
                         .Cascade(CascadeMode.Stop)
                         .NotEmpty()
                         .Length(1, 25);
 
-            RuleFor(prop => prop.Role)
+            RuleFor(employee => employee.Role)
                                     .IsInEnum();
         }
     }

@@ -4,16 +4,15 @@ using FluentValidation;
 
 namespace BarSystem.WebApi.Validations
 {
-    public class DishDtoValidator : AbstractValidator<DishDto>
+    public class DishDtoValidator : ProductDtoValidator<DishDto>
     {
         public DishDtoValidator()
         {
-            Include(new ProductDtoValidator());
+            RuleFor(dish => dish.EstimatedTime)
+                                    .InclusiveBetween(TimeSpan.Zero, TimeSpan.FromMinutes(150))
+                                    .WithMessage("{PropertyName} must be between 0 and 150 minutes");
 
-            RuleFor(prop => prop.EstimatedTime)
-                                    .InclusiveBetween(TimeSpan.Zero, TimeSpan.FromMinutes(150)).WithMessage("{PropertyName} must be between 0 and 150 minutes");
-
-            RuleFor(prop => prop.Category)
+            RuleFor(dish => dish.Category)
                                     .IsInEnum();
         }
     }

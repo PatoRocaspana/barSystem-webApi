@@ -83,7 +83,6 @@ namespace BarSystem.WebApi.Tests.IntegrationTests
 
             Assert.NotNull(result);
             Assert.Equal("Crazy Steak", result.Name);
-            Assert.Equal(3, result.Id);
         }
 
         [Fact]
@@ -101,7 +100,7 @@ namespace BarSystem.WebApi.Tests.IntegrationTests
 
             Assert.NotNull(result);
             Assert.Equal("Crazy Steak", result.Name);
-            Assert.Equal(2, result.Id);
+            Assert.Equal(_dishDto.Id, result.Id);
         }
 
         [Fact]

@@ -1,6 +1,7 @@
 using BarSystem.WebApi.Data;
 using BarSystem.WebApi.Interfaces.Data;
 using FluentValidation.AspNetCore;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -21,6 +22,8 @@ builder.Services.AddDbContext<BarSystemDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("Database"));
 });
+
+builder.Services.AddMediatR(typeof(Program));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

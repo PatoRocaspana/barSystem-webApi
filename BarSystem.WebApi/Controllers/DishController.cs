@@ -1,5 +1,8 @@
 ﻿using BarSystem.WebApi.DTOs;
+using BarSystem.WebApi.Handlers.Commands;
+using BarSystem.WebApi.Handlers.Queries;
 using BarSystem.WebApi.Interfaces.Data;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BarSystem.WebApi.Controllers
@@ -9,10 +12,12 @@ namespace BarSystem.WebApi.Controllers
     public class DishController : ControllerBase
     {
         private readonly IDishRepository _dishRepository;
+        private readonly IMediator _mediator;
 
-        public DishController(IDishRepository dishRepository)
+        public DishController(IDishRepository dishRepository, IMediator mediator)
         {
             _dishRepository = dishRepository;
+            _mediator = mediator;
         }
 
         /// <summary>
@@ -26,15 +31,10 @@ namespace BarSystem.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Get()
         {
-            var dishEntityList = await _dishRepository.GetAllAsync();
+            var query = new GetAllDishesQuery();
+            var response = await _mediator.Send(query);
 
-            if (dishEntityList is null)
-                return NotFound();
-
-            var dishDtoList = dishEntityList.Select(dishEntity => new DishDto(dishEntity))
-                                            .ToList();
-
-            return Ok(dishDtoList);
+            return response == null ? NotFound() : Ok(response);
         }
 
         /// <summary>
@@ -49,14 +49,10 @@ namespace BarSystem.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Get(int id)
         {
-            var dishEntity = await _dishRepository.GetAsync(id);
+            var query = new GetDishByIdQuery(id);
+            var response = await _mediator.Send(query);
 
-            if (dishEntity == null)
-                return NotFound();
-
-            var dishDto = new DishDto(dishEntity);
-
-            return Ok(dishDto);
+            return response == null ? NotFound() : Ok(response);
         }
 
         /// <summary>
@@ -85,16 +81,13 @@ namespace BarSystem.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Post([FromBody] DishDto dishDto)
         {
-            var dishEntity = dishDto.ToDishEntity(dishDto);
+            var command = new CreateDishCommand(dishDto);
+            var response = await _mediator.Send(command);
 
-            var dishCreated = await _dishRepository.CreateAsync(dishEntity);
-
-            if (dishCreated is null)
+            if(response == null)
                 return BadRequest();
 
-            var dishDtoCreated = new DishDto(dishCreated);
-            
-            return CreatedAtAction(nameof(Get), new { id = dishDtoCreated.Id }, dishDtoCreated);
+            return CreatedAtAction(nameof(Get), new { id = response.Id }, response);
         }
 
         /// <summary>
@@ -143,12 +136,12 @@ namespace BarSystem.WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var dishExists = await _dishRepository.EntityExistsAsync(id);
+            var command = new DeleteDishCommand(id);
+            var response = await _mediator.Send(command);
 
-            if (!dishExists)
+            if (!response)
                 return NotFound();
 
-            await _dishRepository.DeleteAsync(id);
             return NoContent();
         }
     }

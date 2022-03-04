@@ -15,26 +15,23 @@ namespace BarSystem.WebApi.Handlers.Commands
             _dishRepository = dishRepository;
         }
 
-        //public async Task<DishDto> Handle(UpdateDishCommand request, CancellationToken cancellationToken)
-        //{
-        //    if (dishDto.Id != id)
-        //        return BadRequest();
+        public async Task<DishDto> Handle(UpdateDishCommand request, CancellationToken cancellationToken)
+        {
+            var dniExist = await _dishRepository.EntityExistsAsync(request.id);
 
-        //    var dniExist = await _dishRepository.EntityExistsAsync(id);
+            if (!dniExist)
+                return null;
 
-        //    if (!dniExist)
-        //        return NotFound();
+            var dish = request.DishDto.ToDishEntity(request.DishDto);
 
-        //    var dishEntity = dishDto.ToDishEntity(dishDto);
+            var dishUpdated = await _dishRepository.UpdateAsync(dish, request.id);
 
-        //    var dishUpdated = await _dishRepository.UpdateAsync(dishEntity, id);
+            if (dishUpdated is null)
+                return null;
 
-        //    if (dishUpdated is null)
-        //        return NotFound();
+            var dishDtoUpdated = new DishDto(dishUpdated);
 
-        //    var dishDtoUpdated = new DishDto(dishUpdated);
-
-        //    return Ok(dishDtoUpdated);
-        //}
+            return dishDtoUpdated;
+        }
     }
 }

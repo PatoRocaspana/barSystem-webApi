@@ -11,12 +11,10 @@ namespace BarSystem.WebApi.Controllers
     [ApiController]
     public class DishController : ControllerBase
     {
-        private readonly IDishRepository _dishRepository;
         private readonly IMediator _mediator;
 
-        public DishController(IDishRepository dishRepository, IMediator mediator)
+        public DishController(IMediator mediator)
         {
-            _dishRepository = dishRepository;
             _mediator = mediator;
         }
 
@@ -108,21 +106,10 @@ namespace BarSystem.WebApi.Controllers
             if (dishDto.Id != id)
                 return BadRequest();
 
-            var dniExist = await _dishRepository.EntityExistsAsync(id);
+            var query = new UpdateDishCommand(dishDto, id);
+            var response = await _mediator.Send(query);
 
-            if (!dniExist)
-                return NotFound();
-
-            var dishEntity = dishDto.ToDishEntity(dishDto);
-
-            var dishUpdated = await _dishRepository.UpdateAsync(dishEntity, id);
-
-            if (dishUpdated is null)
-                return NotFound();
-
-            var dishDtoUpdated = new DishDto(dishUpdated);
-
-            return Ok(dishDtoUpdated);
+            return response == null ? NotFound() : Ok(response);
         }
 
         /// <summary>

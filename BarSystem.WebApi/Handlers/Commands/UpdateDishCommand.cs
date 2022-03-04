@@ -1,5 +1,7 @@
-﻿using BarSystem.WebApi.DTOs;
+﻿using AutoMapper;
+using BarSystem.WebApi.DTOs;
 using BarSystem.WebApi.Interfaces.Data;
+using BarSystem.WebApi.Models;
 using MediatR;
 
 namespace BarSystem.WebApi.Handlers.Commands
@@ -9,10 +11,12 @@ namespace BarSystem.WebApi.Handlers.Commands
     public class UpdateDishCommandHandler : IRequestHandler<UpdateDishCommand, DishDto>
     {
         private readonly IDishRepository _dishRepository;
+        private readonly IMapper _mapper;
 
-        public UpdateDishCommandHandler(IDishRepository dishRepository)
+        public UpdateDishCommandHandler(IDishRepository dishRepository, IMapper mapper)
         {
             _dishRepository = dishRepository;
+            _mapper = mapper;
         }
 
         public async Task<DishDto> Handle(UpdateDishCommand request, CancellationToken cancellationToken)
@@ -22,14 +26,14 @@ namespace BarSystem.WebApi.Handlers.Commands
             if (!dniExist)
                 return null;
 
-            var dish = request.DishDto.ToDishEntity(request.DishDto);
+            var dish = _mapper.Map<Dish>(request.DishDto);
 
             var dishUpdated = await _dishRepository.UpdateAsync(dish, request.id);
 
             if (dishUpdated is null)
                 return null;
 
-            var dishDtoUpdated = new DishDto(dishUpdated);
+            var dishDtoUpdated = _mapper.Map<DishDto>(dish);
 
             return dishDtoUpdated;
         }

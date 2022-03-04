@@ -1,7 +1,6 @@
 ﻿using BarSystem.WebApi.DTOs;
 using BarSystem.WebApi.Handlers.Commands;
 using BarSystem.WebApi.Handlers.Queries;
-using BarSystem.WebApi.Interfaces.Data;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -82,7 +81,7 @@ namespace BarSystem.WebApi.Controllers
             var command = new CreateDishCommand(dishDto);
             var response = await _mediator.Send(command);
 
-            if(response == null)
+            if (response == null)
                 return BadRequest();
 
             return CreatedAtAction(nameof(Get), new { id = response.Id }, response);

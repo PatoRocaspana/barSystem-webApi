@@ -1,4 +1,5 @@
 using BarSystem.WebApi.Data;
+using BarSystem.WebApi.AutoMapper;
 using BarSystem.WebApi.Interfaces.Data;
 using FluentValidation.AspNetCore;
 using MediatR;
@@ -8,7 +9,6 @@ using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers()
                 .AddFluentValidation(options =>
                 {
@@ -22,6 +22,8 @@ builder.Services.AddDbContext<BarSystemDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("Database"));
 });
+
+builder.Services.AddAutoMapper(typeof(MapperProfile));
 
 builder.Services.AddMediatR(typeof(Program));
 

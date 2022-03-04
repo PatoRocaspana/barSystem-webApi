@@ -1,4 +1,5 @@
-﻿using BarSystem.WebApi.DTOs;
+﻿using AutoMapper;
+using BarSystem.WebApi.DTOs;
 using BarSystem.WebApi.Interfaces.Data;
 using MediatR;
 
@@ -9,10 +10,12 @@ namespace BarSystem.WebApi.Handlers.Queries
     public class GetAllDishesQueryHandler : IRequestHandler<GetAllDishesQuery, List<DishDto>>
     {
         private readonly IDishRepository _dishRepository;
+        private readonly IMapper _mapper;
 
-        public GetAllDishesQueryHandler(IDishRepository dishRepository)
+        public GetAllDishesQueryHandler(IDishRepository dishRepository, IMapper mapper)
         {
             _dishRepository = dishRepository;
+            _mapper = mapper;
         }
 
         public async Task<List<DishDto>> Handle(GetAllDishesQuery request, CancellationToken cancellationToken)
@@ -22,8 +25,7 @@ namespace BarSystem.WebApi.Handlers.Queries
             if (dishes == null)
                 return null;
 
-            var dishDtoList = dishes.Select(dishEntity => new DishDto(dishEntity))
-                                    .ToList();
+            var dishDtoList =  _mapper.Map<List<DishDto>>(dishes);
 
             return dishDtoList;
         }

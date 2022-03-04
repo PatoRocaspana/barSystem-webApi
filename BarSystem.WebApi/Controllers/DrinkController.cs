@@ -1,5 +1,7 @@
 ﻿using BarSystem.WebApi.DTOs;
-using BarSystem.WebApi.Interfaces.Data;
+using BarSystem.WebApi.Handlers.Commands;
+using BarSystem.WebApi.Handlers.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BarSystem.WebApi.Controllers
@@ -8,11 +10,11 @@ namespace BarSystem.WebApi.Controllers
     [ApiController]
     public class DrinkController : ControllerBase
     {
-        private readonly IDrinkRepository _drinkRepository;
+        private readonly IMediator _mediator;
 
-        public DrinkController(IDrinkRepository drinkRepository)
+        public DrinkController(IMediator mediator)
         {
-            _drinkRepository = drinkRepository;
+            _mediator = mediator;
         }
 
         /// <summary>
@@ -26,15 +28,10 @@ namespace BarSystem.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Get()
         {
-            var drinkEntityList = await _drinkRepository.GetAllAsync();
+            var query = new GetAllDrinksQuery();
+            var response = await _mediator.Send(query);
 
-            if (drinkEntityList is null)
-                return NotFound();
-
-            var drinkDtoList = drinkEntityList.Select(drinkEntity => new DrinkDto(drinkEntity))
-                                            .ToList();
-
-            return Ok(drinkDtoList);
+            return response == null ? NotFound() : Ok(response);
         }
 
         /// <summary>
@@ -49,14 +46,10 @@ namespace BarSystem.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Get(int id)
         {
-            var drinkEntity = await _drinkRepository.GetAsync(id);
+            var query = new GetDrinkByIdQuery(id);
+            var response = await _mediator.Send(query);
 
-            if (drinkEntity == null)
-                return NotFound();
-
-            var drinkDto = new DrinkDto(drinkEntity);
-
-            return Ok(drinkDto);
+            return response == null ? NotFound() : Ok(response);
         }
 
         /// <summary>
@@ -83,16 +76,13 @@ namespace BarSystem.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Post([FromBody] DrinkDto drinkDto)
         {
-            var drinkEntity = drinkDto.ToDrinkEntity(drinkDto);
+            var command = new CreateDrinkCommand(drinkDto);
+            var response = await _mediator.Send(command);
 
-            var drinkCreated = await _drinkRepository.CreateAsync(drinkEntity);
-
-            if (drinkCreated is null)
+            if (response == null)
                 return BadRequest();
 
-            var drinkDtoCreated = new DrinkDto(drinkCreated);
-
-            return CreatedAtAction(nameof(Get), new { id = drinkDtoCreated.Id }, drinkDtoCreated);
+            return CreatedAtAction(nameof(Get), new { id = response.Id }, response);
         }
 
         /// <summary>
@@ -110,21 +100,13 @@ namespace BarSystem.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Put([FromBody] DrinkDto drinkDto, int id)
         {
-            var dniExist = await _drinkRepository.EntityExistsAsync(id);
+            if (drinkDto.Id != id)
+                return BadRequest();
 
-            if (!dniExist || drinkDto.Id != id)
-                return NotFound();
+            var query = new UpdateDrinkCommand(drinkDto, id);
+            var response = await _mediator.Send(query);
 
-            var drinkEntity = drinkDto.ToDrinkEntity(drinkDto);
-
-            var drinkUpdated = await _drinkRepository.UpdateAsync(drinkEntity, id);
-
-            if (drinkUpdated is null)
-                return NotFound();
-
-            var drinkDtoUpdated = new DrinkDto(drinkUpdated);
-
-            return Ok(drinkDtoUpdated);
+            return response == null ? NotFound() : Ok(response);
         }
 
         /// <summary>
@@ -138,12 +120,12 @@ namespace BarSystem.WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var drinkExists = await _drinkRepository.EntityExistsAsync(id);
+            var command = new DeleteDrinkCommand(id);
+            var response = await _mediator.Send(command);
 
-            if (!drinkExists)
+            if (!response)
                 return NotFound();
 
-            await _drinkRepository.DeleteAsync(id);
             return NoContent();
         }
     }

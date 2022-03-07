@@ -33,7 +33,7 @@ namespace BarSystem.WebApi.Handlers.Commands
             if (dishUpdated is null)
                 return null;
 
-            var dishDtoUpdated = _mapper.Map<DishDto>(dish);
+            var dishDtoUpdated = _mapper.Map<DishDto>(dishUpdated);
 
             return dishDtoUpdated;
         }

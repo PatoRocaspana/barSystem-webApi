@@ -28,7 +28,7 @@ namespace BarSystem.WebApi.Handlers.Commands
             if (drinkCreated == null)
                 return null;
 
-            var drinkDtoCreated = _mapper.Map<DrinkDto>(drink);
+            var drinkDtoCreated = _mapper.Map<DrinkDto>(drinkCreated);
 
             return drinkDtoCreated;
         }

@@ -10,6 +10,7 @@ namespace BarSystem.WebApi.AutoMapper
         {
             CreateMap<DishDto, Dish>().ReverseMap();
             CreateMap<DrinkDto, Drink>().ReverseMap();
+            CreateMap<EmployeeDto, Employee>().ReverseMap();
         }
     }
 }

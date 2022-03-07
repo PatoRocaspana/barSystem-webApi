@@ -13,16 +13,26 @@ namespace BarSystem.WebApi.Tests.ValidationTests
 
         public DrinkValidationsTests()
         {
-            _drinkDto = new DrinkDto()
-            {
-                Category = (DrinkCategory)5
-            };
+            _drinkDto = new DrinkDto() { };
 
             _drinkDtoValidator = new DrinkDtoValidator();
         }
 
         [Fact]
-        public void Validation_ShouldHaveError_InvalidEnumCategory()
+        public void Validation_ShouldNotHaveError_DrinkCategoryIsValid()
+        {
+            //Arrange
+            _drinkDto.Category = DrinkCategory.SpecialDrink;
+
+            //Act
+            var result = _drinkDtoValidator.TestValidate(_drinkDto);
+
+            //Assert
+            result.ShouldNotHaveValidationErrorFor(drink => drink.Category);
+        }
+
+        [Fact]
+        public void Validation_ShouldHaveError_InvalidDrinkCategory()
         {
             //Arrange
             _drinkDto.Category = (DrinkCategory)100;

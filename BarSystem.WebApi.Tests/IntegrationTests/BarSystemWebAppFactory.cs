@@ -1,12 +1,10 @@
 ﻿using BarSystem.WebApi.Data;
-using BarSystem.WebApi.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace BarSystem.WebApi.Tests.IntegrationTests
@@ -56,46 +54,20 @@ namespace BarSystem.WebApi.Tests.IntegrationTests
 
         private void InitializeDbForTests(BarSystemDbContext db)
         {
-            if(db.Dishes.Any())
+            if (db.Dishes.Any())
                 db.Dishes.RemoveRange(db.Dishes);
 
-            db.Dishes.AddRange(GetSeedingDishes());
+            if (db.Drinks.Any())
+                db.Drinks.RemoveRange(db.Drinks);
+
+            if (db.Employees.Any())
+                db.Employees.RemoveRange(db.Employees);
+
+            db.Dishes.AddRange(SeedsDbTests.GetSeedingDishes());
+            db.Drinks.AddRange(SeedsDbTests.GetSeedingDrinks());
+            db.Employees.AddRange(SeedsDbTests.GetSeedingEmployees());
+
             db.SaveChanges();
-        }
-
-        private List<Dish> GetSeedingDishes()
-        {
-            var dishA = new Dish()
-            {
-                Id = 1,
-                Name = "NameA",
-                Description = "Description of dishA",
-                Price = 100,
-                Stock = 10,
-                Category = 0,
-                EstimatedTime = TimeSpan.FromMinutes(35),
-                IsReady = false
-            };
-
-            var dishB = new Dish()
-            {
-                Id = 2,
-                Name = "NameB",
-                Description = "Description of dishB",
-                Price = 200,
-                Stock = 20,
-                Category = 0,
-                EstimatedTime = TimeSpan.FromMinutes(45),
-                IsReady = true
-            };
-
-            var dishList = new List<Dish>()
-            {
-                dishA,
-                dishB
-            };
-
-            return dishList;
         }
     }
 }

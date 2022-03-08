@@ -1,7 +1,10 @@
 using BarSystem.WebApi.Data;
-using BarSystem.WebApi.AutoMapper;
+using BarSystem.WebApi.DTOs;
 using BarSystem.WebApi.Interfaces.Data;
+using BarSystem.WebApi.Models;
 using FluentValidation.AspNetCore;
+using Mapster;
+using MapsterMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
@@ -22,8 +25,6 @@ builder.Services.AddDbContext<BarSystemDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("Database"));
 });
-
-builder.Services.AddAutoMapper(typeof(MapperProfile));
 
 builder.Services.AddMediatR(typeof(Program));
 
@@ -46,6 +47,20 @@ builder.Services.AddSwaggerDocument(config =>
         };
     };
 });
+
+var mapsterConfig = TypeAdapterConfig.GlobalSettings;
+
+TypeAdapterConfig<TableDto, Table>.NewConfig()
+    .PreserveReference(true);
+TypeAdapterConfig<DrinkDto, Drink>.NewConfig()
+    .PreserveReference(true);
+TypeAdapterConfig<DishDto, Dish>.NewConfig()
+    .PreserveReference(true);
+TypeAdapterConfig<EmployeeDto, Employee>.NewConfig()
+    .PreserveReference(true);
+
+builder.Services.AddSingleton(mapsterConfig);
+builder.Services.AddScoped<IMapper, ServiceMapper>();
 
 builder.Services.AddTransient<IDishRepository, DishRepository>();
 builder.Services.AddTransient<IDrinkRepository, DrinkRepository>();

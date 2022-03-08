@@ -1,7 +1,7 @@
-﻿using AutoMapper;
-using BarSystem.WebApi.DTOs;
+﻿using BarSystem.WebApi.DTOs;
 using BarSystem.WebApi.Interfaces.Data;
 using BarSystem.WebApi.Models;
+using MapsterMapper;
 using MediatR;
 
 namespace BarSystem.WebApi.Handlers.Commands

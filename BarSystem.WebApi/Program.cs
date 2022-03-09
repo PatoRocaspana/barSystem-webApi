@@ -66,6 +66,11 @@ config.NewConfig<TableDto, Table>()
             .Map(dest => dest.Drinks, src => src.DrinksDto)
             .Map(dest => dest.Waiter, src => src.WaiterDto);
 
+config.NewConfig<Table, TableDto>()
+            .Map(dest => dest.DishesDto, src => src.Dishes)
+            .Map(dest => dest.DrinksDto, src => src.Drinks)
+            .Map(dest => dest.WaiterDto, src => src.Waiter);
+
 builder.Services.AddSingleton(config);
 builder.Services.AddScoped<IMapper, ServiceMapper>();
 

@@ -16,5 +16,14 @@ namespace BarSystem.WebApi.Data
             existingTable.Drinks = newTable.Drinks;
             existingTable.Dishes = newTable.Dishes;
         }
+
+        public override async Task<Table> CreateAsync(Table entity)
+        {
+            _dbContext.Tables.Attach(entity);
+            _dbContext.Entry(entity).State = EntityState.Added;
+            await _dbContext.SaveChangesAsync();
+
+            return entity;
+        }
     }
 }

@@ -6,7 +6,7 @@ namespace BarSystem.WebApi.Data
 {
     public abstract class BaseRepository<T> : IBaseRepository<T> where T : Entity
     {
-        private readonly BarSystemDbContext _dbContext;
+        protected readonly BarSystemDbContext _dbContext;
 
         public BaseRepository(BarSystemDbContext dbContext)
         {

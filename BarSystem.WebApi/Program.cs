@@ -48,18 +48,25 @@ builder.Services.AddSwaggerDocument(config =>
     };
 });
 
-var mapsterConfig = TypeAdapterConfig.GlobalSettings;
 
-TypeAdapterConfig<TableDto, Table>.NewConfig()
-    .PreserveReference(true);
-TypeAdapterConfig<DrinkDto, Drink>.NewConfig()
-    .PreserveReference(true);
-TypeAdapterConfig<DishDto, Dish>.NewConfig()
-    .PreserveReference(true);
-TypeAdapterConfig<EmployeeDto, Employee>.NewConfig()
-    .PreserveReference(true);
+//TypeAdapterConfig<TableDto, Table>.NewConfig()
+//    .PreserveReference(true);
+//TypeAdapterConfig<DrinkDto, Drink>.NewConfig()
+//    .PreserveReference(true);
+//TypeAdapterConfig<DishDto, Dish>.NewConfig()
+//    .PreserveReference(true);
+//TypeAdapterConfig<EmployeeDto, Employee>.NewConfig()
+//    .PreserveReference(true);
 
-builder.Services.AddSingleton(mapsterConfig);
+
+var config = new TypeAdapterConfig();
+
+config.NewConfig<TableDto, Table>()
+            .Map(dest => dest.Dishes, src => src.DishesDto)
+            .Map(dest => dest.Drinks, src => src.DrinksDto)
+            .Map(dest => dest.Waiter, src => src.WaiterDto);
+
+builder.Services.AddSingleton(config);
 builder.Services.AddScoped<IMapper, ServiceMapper>();
 
 builder.Services.AddTransient<IDishRepository, DishRepository>();

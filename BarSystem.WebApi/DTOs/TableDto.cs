@@ -7,16 +7,16 @@ namespace BarSystem.WebApi.DTOs
     {
         public TableDto() { }
 
-        public TableDto(Table tableEntity)
-        {
-            Id = tableEntity.Id;
-            WaiterDto = new EmployeeDto(tableEntity.Waiter);
-            AmountPeople = tableEntity.AmountPeople;
-            ExistAdult = tableEntity.ExistAdult;
-            DrinksDto = ToDrinkDtoList(tableEntity.Drinks);
-            DishesDto = ToDishDtoList(tableEntity.Dishes);
-            TotalPrice = tableEntity.TotalPrice;
-        }
+        //public TableDto(Table tableEntity)
+        //{
+        //    Id = tableEntity.Id;
+        //    WaiterDto = new EmployeeDto(tableEntity.Waiter);
+        //    AmountPeople = tableEntity.AmountPeople;
+        //    ExistAdult = tableEntity.ExistAdult;
+        //    DrinksDto = ToDrinkDtoList(tableEntity.Drinks);
+        //    DishesDto = ToDishDtoList(tableEntity.Dishes);
+        //    TotalPrice = tableEntity.TotalPrice;
+        //}
 
         public EmployeeDto WaiterDto { get; set; }
         public int AmountPeople { get; set; }
@@ -25,20 +25,20 @@ namespace BarSystem.WebApi.DTOs
         public List<DishDto> DishesDto { get; set; }
         public float TotalPrice { get; set; }
 
-        public Table ToTableEntity(TableDto tableDto)
-        {
-            var tableEntity = new Table()
-            {
-                Id = tableDto.Id,
-                Waiter = WaiterDto.ToEmployeeEntity(tableDto.WaiterDto),
-                AmountPeople = tableDto.AmountPeople,
-                ExistAdult = tableDto.ExistAdult,
-                Drinks = ToDrinkList(tableDto.DrinksDto),
-                Dishes = ToDishList(tableDto.DishesDto),
-            };
+        //public Table ToTableEntity(TableDto tableDto)
+        //{
+        //    var tableEntity = new Table()
+        //    {
+        //        Id = tableDto.Id,
+        //        Waiter = WaiterDto.ToEmployeeEntity(tableDto.WaiterDto),
+        //        AmountPeople = tableDto.AmountPeople,
+        //        ExistAdult = tableDto.ExistAdult,
+        //        Drinks = ToDrinkList(tableDto.DrinksDto),
+        //        Dishes = ToDishList(tableDto.DishesDto),
+        //    };
 
-            return tableEntity;
-        }
+        //    return tableEntity;
+        //}
 
         private List<DrinkDto> ToDrinkDtoList(List<Drink> drinkEntityList)
         {

@@ -62,10 +62,38 @@ namespace BarSystem.WebApi.Controllers
         /// 
         ///     POST /Table
         ///     {
-        ///         "CHANGE THIS": "CHANGE THIS",
-        ///         "CHANGE THIS": "CHANGE THIS",
-        ///         "CHANGE THIS": "CHANGE THIS",
-        ///         "CHANGE THIS": CHANGE THIS
+        ///       "employeeDto": {
+        ///         "dni": "33888575",
+        ///         "firstName": "Johny",
+        ///         "lastName": "Bravo",
+        ///         "role": 1,
+        ///         "id": 28
+        ///        },
+        ///       "amountPeople": 1,
+        ///       "existAdult": true,
+        ///       "drinksDto": [
+        ///         {
+        ///          "category": 4,
+        ///          "name": "GinTonic",
+        ///          "description": "Gin with Tonic Water",
+        ///          "price": 575,
+        ///          "stock": 64,
+        ///          "id": 7
+        ///         }
+        ///       ],
+        ///       "dishesDto": [
+        ///         {
+        ///         "category": 0,
+        ///         "estimatedTime": "00:35:00",
+        ///         "isReady": false,
+        ///         "name": "Crazy Steak",
+        ///         "description": "Steak with Mushroom Sauce",
+        ///         "price": 1390,
+        ///         "stock": 23,
+        ///         "id": 41
+        ///         }
+        ///       ],
+        ///       "totalPrice": 0
         ///     }
         /// </remarks>
         /// <response code="201">Returns the table created</response>

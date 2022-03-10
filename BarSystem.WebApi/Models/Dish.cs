@@ -8,5 +8,7 @@ namespace BarSystem.WebApi.Models
         public FoodCategory Category { get; set; }
         public TimeSpan EstimatedTime { get; set; }
         public bool IsReady { get; set; }
+
+        public List<Table> Tables { get; set; } = new List<Table>();
     }
 }

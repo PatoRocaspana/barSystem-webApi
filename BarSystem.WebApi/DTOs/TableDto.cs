@@ -4,7 +4,7 @@ namespace BarSystem.WebApi.DTOs
 {
     public class TableDto : EntityDto
     {
-        public EmployeeDto WaiterDto { get; set; }
+        public EmployeeDto EmployeeDto { get; set; }
         public int AmountPeople { get; set; }
         public bool ExistAdult { get; set; }
         public List<DrinkDto> DrinksDto { get; set; }

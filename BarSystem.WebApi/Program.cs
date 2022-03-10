@@ -64,12 +64,12 @@ var config = new TypeAdapterConfig();
 config.NewConfig<TableDto, Table>()
             .Map(dest => dest.Dishes, src => src.DishesDto)
             .Map(dest => dest.Drinks, src => src.DrinksDto)
-            .Map(dest => dest.Waiter, src => src.WaiterDto);
+            .Map(dest => dest.Employee, src => src.EmployeeDto);
 
 config.NewConfig<Table, TableDto>()
             .Map(dest => dest.DishesDto, src => src.Dishes)
             .Map(dest => dest.DrinksDto, src => src.Drinks)
-            .Map(dest => dest.WaiterDto, src => src.Waiter);
+            .Map(dest => dest.EmployeeDto, src => src.Employee);
 
 builder.Services.AddSingleton(config);
 builder.Services.AddScoped<IMapper, ServiceMapper>();

@@ -10,7 +10,7 @@ namespace BarSystem.WebApi.Data
 
         protected override void UpdateEntity(Table existingTable, Table newTable)
         {
-            existingTable.Waiter = newTable.Waiter;
+            existingTable.Employee = newTable.Employee  ;
             existingTable.AmountPeople = newTable.AmountPeople;
             existingTable.ExistAdult = newTable.ExistAdult;
             existingTable.Drinks = newTable.Drinks;

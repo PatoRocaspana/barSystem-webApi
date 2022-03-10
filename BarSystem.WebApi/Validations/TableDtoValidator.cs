@@ -7,7 +7,7 @@ namespace BarSystem.WebApi.Validations
     {
         public TableDtoValidator()
         {
-            RuleFor(table => table.WaiterDto)
+            RuleFor(table => table.EmployeeDto)
                                     .SetValidator(new EmployeeDtoValidator());
 
             RuleFor(table => table.AmountPeople)

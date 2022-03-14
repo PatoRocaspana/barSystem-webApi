@@ -4,7 +4,6 @@ namespace BarSystem.WebApi.Models
 {
     public class Table : Entity
     {
-        public Employee Employee { get; set; }
         public int EmployeeId { get; set; }
         public int AmountPeople { get; set; }
         public bool ExistAdult { get; set; }

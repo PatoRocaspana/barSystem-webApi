@@ -48,28 +48,7 @@ builder.Services.AddSwaggerDocument(config =>
     };
 });
 
-
-//TypeAdapterConfig<TableDto, Table>.NewConfig()
-//    .PreserveReference(true);
-//TypeAdapterConfig<DrinkDto, Drink>.NewConfig()
-//    .PreserveReference(true);
-//TypeAdapterConfig<DishDto, Dish>.NewConfig()
-//    .PreserveReference(true);
-//TypeAdapterConfig<EmployeeDto, Employee>.NewConfig()
-//    .PreserveReference(true);
-
-
 var config = new TypeAdapterConfig();
-
-config.NewConfig<TableDto, Table>()
-            .Map(dest => dest.Dishes, src => src.DishesDto)
-            .Map(dest => dest.Drinks, src => src.DrinksDto)
-            .Map(dest => dest.Employee, src => src.EmployeeDto);
-
-config.NewConfig<Table, TableDto>()
-            .Map(dest => dest.DishesDto, src => src.Dishes)
-            .Map(dest => dest.DrinksDto, src => src.Drinks)
-            .Map(dest => dest.EmployeeDto, src => src.Employee);
 
 builder.Services.AddSingleton(config);
 builder.Services.AddScoped<IMapper, ServiceMapper>();

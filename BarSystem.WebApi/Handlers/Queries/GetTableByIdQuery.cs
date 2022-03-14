@@ -27,6 +27,16 @@ namespace BarSystem.WebApi.Handlers.Queries
 
             var tableDto = _mapper.Map<TableDto>(table);
 
+            foreach (var dish in table.Dishes)
+            {
+                tableDto.DishIds.Add(dish.Id);
+            }
+
+            foreach (var drink in table.Drinks)
+            {
+                tableDto.DrinksIds.Add(drink.Id);
+            }
+
             return tableDto;
         }
     }

@@ -55,7 +55,7 @@ namespace BarSystem.WebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Dishes");
+                    b.ToTable("Dishes", (string)null);
                 });
 
             modelBuilder.Entity("BarSystem.WebApi.Models.Drink", b =>
@@ -85,7 +85,7 @@ namespace BarSystem.WebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Drinks");
+                    b.ToTable("Drinks", (string)null);
                 });
 
             modelBuilder.Entity("BarSystem.WebApi.Models.Employee", b =>
@@ -113,7 +113,7 @@ namespace BarSystem.WebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Employees");
+                    b.ToTable("Employees", (string)null);
                 });
 
             modelBuilder.Entity("BarSystem.WebApi.Models.Table", b =>
@@ -137,7 +137,7 @@ namespace BarSystem.WebApi.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.ToTable("Tables");
+                    b.ToTable("Tables", (string)null);
                 });
 
             modelBuilder.Entity("DishTable", b =>
@@ -152,7 +152,7 @@ namespace BarSystem.WebApi.Migrations
 
                     b.HasIndex("TablesId");
 
-                    b.ToTable("DishTable");
+                    b.ToTable("DishTable", (string)null);
                 });
 
             modelBuilder.Entity("DrinkTable", b =>
@@ -167,7 +167,7 @@ namespace BarSystem.WebApi.Migrations
 
                     b.HasIndex("TablesId");
 
-                    b.ToTable("DrinkTable");
+                    b.ToTable("DrinkTable", (string)null);
                 });
 
             modelBuilder.Entity("BarSystem.WebApi.Models.Table", b =>

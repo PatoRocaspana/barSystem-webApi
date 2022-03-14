@@ -10,20 +10,11 @@ namespace BarSystem.WebApi.Data
 
         protected override void UpdateEntity(Table existingTable, Table newTable)
         {
-            existingTable.Employee = newTable.Employee  ;
+            existingTable.EmployeeId = newTable.EmployeeId;
             existingTable.AmountPeople = newTable.AmountPeople;
             existingTable.ExistAdult = newTable.ExistAdult;
             existingTable.Drinks = newTable.Drinks;
             existingTable.Dishes = newTable.Dishes;
-        }
-
-        public override async Task<Table> CreateAsync(Table entity)
-        {
-            _dbContext.Tables.Attach(entity);
-            _dbContext.Entry(entity).State = EntityState.Added;
-            await _dbContext.SaveChangesAsync();
-
-            return entity;
         }
     }
 }

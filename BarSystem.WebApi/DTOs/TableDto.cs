@@ -9,6 +9,5 @@ namespace BarSystem.WebApi.DTOs
         public bool ExistAdult { get; set; }
         public List<int> DishIds { get; set; } = new List<int>();
         public List<int> DrinksIds { get; set; } = new List<int>();
-        public float TotalPrice { get; set; }
     }
 }

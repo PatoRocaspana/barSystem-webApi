@@ -5,6 +5,7 @@ namespace BarSystem.WebApi.Models
     public class Table : Entity
     {
         public int EmployeeId { get; set; }
+        public Employee Employee { get; set; }
         public int AmountPeople { get; set; }
         public bool ExistAdult { get; set; }
         public List<Drink> Drinks { get; set; } = new List<Drink>();

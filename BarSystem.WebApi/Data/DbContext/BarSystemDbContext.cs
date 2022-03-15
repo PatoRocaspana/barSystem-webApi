@@ -16,6 +16,7 @@ namespace BarSystem.WebApi.Data
         {
             modelBuilder.Entity<Table>().Navigation(e => e.Dishes).AutoInclude();
             modelBuilder.Entity<Table>().Navigation(e => e.Drinks).AutoInclude();
+            modelBuilder.Entity<Table>().Navigation(e => e.Employee).AutoInclude();
         }
     }
 }

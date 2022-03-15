@@ -5,9 +5,9 @@ using MediatR;
 
 namespace BarSystem.WebApi.Handlers.Queries
 {
-    public record GetAllTablesQuery : IRequest<List<TableDto>> { }
+    public record GetAllTablesQuery : IRequest<List<TableInfoDto>> { }
 
-    public class GetAllTablesQueryHandler : IRequestHandler<GetAllTablesQuery, List<TableDto>>
+    public class GetAllTablesQueryHandler : IRequestHandler<GetAllTablesQuery, List<TableInfoDto>>
     {
         private readonly ITableRepository _tableRepository;
         private readonly IMapper _mapper;
@@ -18,16 +18,16 @@ namespace BarSystem.WebApi.Handlers.Queries
             _mapper = mapper;
         }
 
-        public async Task<List<TableDto>> Handle(GetAllTablesQuery request, CancellationToken cancellationToken)
+        public async Task<List<TableInfoDto>> Handle(GetAllTablesQuery request, CancellationToken cancellationToken)
         {
             var tables = await _tableRepository.GetAllAsync();
 
             if (tables == null)
                 return null;
 
-            var TableDtoList = _mapper.Map<List<TableDto>>(tables);
+            var TableInfoDtoList = _mapper.Map<List<TableInfoDto>>(tables);
 
-            return TableDtoList;
+            return TableInfoDtoList;
         }
     }
 }

@@ -50,6 +50,10 @@ builder.Services.AddSwaggerDocument(config =>
 
 var config = new TypeAdapterConfig();
 
+config.NewConfig<Table, TableInfoDto>()
+            .Map(dest => dest.DishesInfoDto, src => src.Dishes)
+            .Map(dest => dest.DrinksInfoDto, src => src.Drinks);
+
 builder.Services.AddSingleton(config);
 builder.Services.AddScoped<IMapper, ServiceMapper>();
 

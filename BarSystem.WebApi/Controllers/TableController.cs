@@ -24,7 +24,7 @@ namespace BarSystem.WebApi.Controllers
         /// <response code="200">Returns the list of tables</response>
         /// <response code="404">Tables List not found</response>
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<TableDto>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<TableInfoDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Get()
         {
@@ -42,7 +42,7 @@ namespace BarSystem.WebApi.Controllers
         /// <response code="200">Returns the table</response>
         /// <response code="404">Table was not found</response>
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TableDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TableInfoDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Get(int id)
         {
@@ -69,15 +69,14 @@ namespace BarSystem.WebApi.Controllers
         ///           41
         ///       ],
         ///       "drinksIds": [
-        ///         7
-        ///       ],
-        ///         "totalPrice": 0
+        ///         7, 9
+        ///       ]
         ///     }
         /// </remarks>
         /// <response code="201">Returns the table created</response>
         /// <response code="400">Invalid Table</response>
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(TableDto))]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(TableInfoDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Post([FromBody] TableDto tableDto)
         {
@@ -87,7 +86,7 @@ namespace BarSystem.WebApi.Controllers
             if (response == null)
                 return BadRequest();
 
-            return CreatedAtAction(nameof(Get), new { id = response.Id }, response);
+            return CreatedAtAction(nameof(Get), new { id = response.Id}, response);
         }
 
         /// <summary>
@@ -100,7 +99,7 @@ namespace BarSystem.WebApi.Controllers
         /// <response code="400">Invalid Table</response>
         /// <response code="404">Table not found</response>
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TableDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TableInfoDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Put([FromBody] TableDto tableDto, int id)

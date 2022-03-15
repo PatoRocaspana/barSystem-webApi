@@ -6,9 +6,9 @@ using MediatR;
 
 namespace BarSystem.WebApi.Handlers.Commands
 {
-    public record CreateTableCommand(TableDto TableDto) : IRequest<TableDto> { }
+    public record CreateTableCommand(TableDto TableDto) : IRequest<TableInfoDto> { }
 
-    public class CreateTableCommandHandler : IRequestHandler<CreateTableCommand, TableDto>
+    public class CreateTableCommandHandler : IRequestHandler<CreateTableCommand, TableInfoDto>
     {
         private readonly ITableRepository _tableRepository;
         private readonly IDishRepository _dishRepository;
@@ -23,18 +23,20 @@ namespace BarSystem.WebApi.Handlers.Commands
             _mapper = mapper;
         }
 
-        public async Task<TableDto> Handle(CreateTableCommand request, CancellationToken cancellationToken)
+        public async Task<TableInfoDto> Handle(CreateTableCommand request, CancellationToken cancellationToken)
         {
             var table = _mapper.Map<Table>(request.TableDto);
 
             foreach (var dish in request.TableDto.DishIds)
             {
-                table.Dishes.Add(await _dishRepository.GetAsync(dish));
+                var existingDish = await _dishRepository.GetAsync(dish);
+                table.Dishes.Add(existingDish);
             }
 
             foreach (var drink in request.TableDto.DrinksIds)
             {
-                table.Drinks.Add(await _drinkRepository.GetAsync(drink));
+                var existingDrink = await _drinkRepository.GetAsync(drink);
+                table.Drinks.Add(existingDrink);
             }
 
             var tableCreated = await _tableRepository.CreateAsync(table);
@@ -42,9 +44,9 @@ namespace BarSystem.WebApi.Handlers.Commands
             if (tableCreated == null)
                 return null;
 
-            var tableDtoCreated = _mapper.Map<TableDto>(tableCreated);
+            var tableInfoDtoCreated = _mapper.Map<TableInfoDto>(tableCreated);
 
-            return tableDtoCreated;
+            return tableInfoDtoCreated;
         }
     }
 }

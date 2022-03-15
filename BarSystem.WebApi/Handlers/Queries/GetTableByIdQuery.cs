@@ -5,9 +5,9 @@ using MediatR;
 
 namespace BarSystem.WebApi.Handlers.Queries
 {
-    public record GetTableByIdQuery(int Id) : IRequest<TableDto> { }
+    public record GetTableByIdQuery(int Id) : IRequest<TableInfoDto> { }
 
-    public class GetTableByIdQueryHandler : IRequestHandler<GetTableByIdQuery, TableDto>
+    public class GetTableByIdQueryHandler : IRequestHandler<GetTableByIdQuery, TableInfoDto>
     {
         private readonly ITableRepository _tableRepository;
         private readonly IMapper _mapper;
@@ -18,26 +18,16 @@ namespace BarSystem.WebApi.Handlers.Queries
             _mapper = mapper;
         }
 
-        public async Task<TableDto> Handle(GetTableByIdQuery request, CancellationToken cancellationToken)
+        public async Task<TableInfoDto> Handle(GetTableByIdQuery request, CancellationToken cancellationToken)
         {
             var table = await _tableRepository.GetAsync(request.Id);
 
             if (table == null)
                 return null;
 
-            var tableDto = _mapper.Map<TableDto>(table);
+            var tableInfoDto = _mapper.Map<TableInfoDto>(table);
 
-            foreach (var dish in table.Dishes)
-            {
-                tableDto.DishIds.Add(dish.Id);
-            }
-
-            foreach (var drink in table.Drinks)
-            {
-                tableDto.DrinksIds.Add(drink.Id);
-            }
-
-            return tableDto;
+            return tableInfoDto;
         }
     }
 }

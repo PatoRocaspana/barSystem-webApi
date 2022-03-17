@@ -1,4 +1,5 @@
-﻿using BarSystem.WebApi.Models;
+﻿using BarSystem.WebApi.Data;
+using BarSystem.WebApi.Models;
 using BarSystem.WebApi.Models.Enum;
 using System;
 using System.Collections.Generic;
@@ -126,14 +127,67 @@ namespace BarSystem.WebApi.Tests.IntegrationTests
                 Role = Role.Cook
             };
 
-            var drinkList = new List<Employee>()
+            var employeeList = new List<Employee>()
             {
                 employeeA,
                 employeeB,
                 employeeC
             };
 
-            return drinkList;
+            return employeeList;
+        }
+
+        public static List<Table> GetSeedingTables(BarSystemDbContext db)
+        {
+            var listDish = new List<Dish>();
+            listDish.Add(db.Dishes.Find(1));
+
+            var listDrink = new List<Drink>();
+            listDrink.Add(db.Drinks.Find(1));
+
+            var employee = db.Employees.Find(1);
+
+            var tableA = new Table()
+            {
+                Id = 1,
+                AmountPeople = 10,
+                ExistAdult = true,
+                EmployeeId = 1,
+                Employee = employee,
+                Dishes = listDish,
+                Drinks = listDrink
+            };
+
+            var tableB = new Table()
+            {
+                Id = 2,
+                AmountPeople = 20,
+                ExistAdult = true,
+                EmployeeId = 1,
+                Employee = employee,
+                Dishes = listDish,
+                Drinks = listDrink
+            };
+
+            var tableC = new Table()
+            {
+                Id = 33,
+                AmountPeople = 30,
+                ExistAdult = true,
+                EmployeeId = 1,
+                Employee = employee,
+                Dishes = listDish,
+                Drinks = listDrink
+            };
+
+            var tableList = new List<Table>()
+            {
+                tableA,
+                tableB,
+                tableC
+            };
+
+            return tableList;
         }
     }
 }

@@ -63,9 +63,13 @@ namespace BarSystem.WebApi.Tests.IntegrationTests
             if (db.Employees.Any())
                 db.Employees.RemoveRange(db.Employees);
 
+            if (db.Tables.Any())
+                db.Tables.RemoveRange(db.Tables);
+
             db.Dishes.AddRange(SeedsDbTests.GetSeedingDishes());
             db.Drinks.AddRange(SeedsDbTests.GetSeedingDrinks());
             db.Employees.AddRange(SeedsDbTests.GetSeedingEmployees());
+            db.Tables.AddRange(SeedsDbTests.GetSeedingTables(db));
 
             db.SaveChanges();
         }

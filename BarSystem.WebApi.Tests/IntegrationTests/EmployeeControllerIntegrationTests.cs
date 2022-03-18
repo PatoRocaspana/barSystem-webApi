@@ -40,7 +40,6 @@ namespace BarSystem.WebApi.Tests.IntegrationTests
 
             Assert.NotNull(result);
             Assert.NotEmpty(result);
-            Assert.Equal(3, result.Count);
         }
 
         [Fact]
@@ -69,35 +68,29 @@ namespace BarSystem.WebApi.Tests.IntegrationTests
         }
 
         [Fact]
-        public async Task Post_ReturnsCreatedStatusCode_WhenSuccess()
+        public async Task Post_ReturnsOKStatusCode_WhenSuccess()
         {
             //Act
             var response = await _httpClient.PostAsJsonAsync("/api/Employee", _employeeDto);
-            var result = await response.Content.ReadFromJsonAsync<EmployeeDto>();
+            var result = await response.Content.ReadFromJsonAsync<int?>();
 
             //Assert
-            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.NotNull(result);
-            Assert.Equal(_employeeDto.FirstName, result.FirstName);
+            Assert.NotEqual(0, result);
         }
 
         [Fact]
-        public async Task Put_ReturnsOkStatusCode_WhenSuccess()
+        public async Task Put_ReturnsNoContentStatusCode_WhenSuccess()
         {
             //Arrange
             _employeeDto.Id = 1;
 
             //Act
             var response = await _httpClient.PutAsJsonAsync("/api/Employee/1", _employeeDto);
-            var result = await response.Content.ReadFromJsonAsync<EmployeeDto>();
 
             //Assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-
-            Assert.NotNull(result);
-            Assert.Equal(_employeeDto.FirstName, result.FirstName);
-            Assert.Equal(_employeeDto.Id, result.Id);
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
         }
 
         [Fact]
@@ -117,10 +110,10 @@ namespace BarSystem.WebApi.Tests.IntegrationTests
         public async Task Put_ReturnsNotFoundStatusCode_WhenIdsNoExists()
         {
             //Arrange
-            _employeeDto.Id = 4;
+            _employeeDto.Id = 7;
 
             //Act
-            var response = await _httpClient.PutAsJsonAsync("/api/Employee/4", _employeeDto);
+            var response = await _httpClient.PutAsJsonAsync("/api/Employee/7", _employeeDto);
 
             //Assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);

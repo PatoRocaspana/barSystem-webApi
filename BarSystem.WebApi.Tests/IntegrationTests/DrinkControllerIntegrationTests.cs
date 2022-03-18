@@ -41,7 +41,6 @@ namespace BarSystem.WebApi.Tests.IntegrationTests
 
             Assert.NotNull(result);
             Assert.NotEmpty(result);
-            Assert.Equal(3, result.Count);
         }
 
         [Fact]
@@ -70,35 +69,29 @@ namespace BarSystem.WebApi.Tests.IntegrationTests
         }
 
         [Fact]
-        public async Task Post_ReturnsCreatedStatusCode_WhenSuccess()
+        public async Task Post_ReturnsOKStatusCode_WhenSuccess()
         {
             //Act
             var response = await _httpClient.PostAsJsonAsync("/api/Drink", _drinkDto);
-            var result = await response.Content.ReadFromJsonAsync<DrinkDto>();
+            var result = await response.Content.ReadFromJsonAsync<int?>();
 
             //Assert
-            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.NotNull(result);
-            Assert.Equal(_drinkDto.Name, result.Name);
+            Assert.NotEqual(0, result);
         }
 
         [Fact]
-        public async Task Put_ReturnsOkStatusCode_WhenSuccess()
+        public async Task Put_ReturnsNoContentStatusCode_WhenSuccess()
         {
             //Arrange
             _drinkDto.Id = 1;
 
             //Act
             var response = await _httpClient.PutAsJsonAsync("/api/Drink/1", _drinkDto);
-            var result = await response.Content.ReadFromJsonAsync<DrinkDto>();
 
             //Assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-
-            Assert.NotNull(result);
-            Assert.Equal(_drinkDto.Name, result.Name);
-            Assert.Equal(_drinkDto.Id, result.Id);
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
         }
 
         [Fact]

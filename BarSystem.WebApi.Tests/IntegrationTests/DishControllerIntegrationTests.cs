@@ -44,7 +44,6 @@ namespace BarSystem.WebApi.Tests.IntegrationTests
 
             Assert.NotNull(result);
             Assert.NotEmpty(result);
-            Assert.Equal(3, result.Count);
         }
 
         [Fact]
@@ -73,35 +72,29 @@ namespace BarSystem.WebApi.Tests.IntegrationTests
         }
 
         [Fact]
-        public async Task Post_ReturnsCreatedStatusCode_WhenSuccess()
+        public async Task Post_ReturnsOKStatusCode_WhenSuccess()
         {
             //Act
             var response = await _httpClient.PostAsJsonAsync("/api/Dish", _dishDto);
-            var result = await response.Content.ReadFromJsonAsync<DishDto>();
+            var result = await response.Content.ReadFromJsonAsync<int?>();
 
             //Assert
-            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.NotNull(result);
-            Assert.Equal(_dishDto.Name, result.Name);
+            Assert.NotEqual(0, result);
         }
 
         [Fact]
-        public async Task Put_ReturnsOkStatusCode_WhenSuccess()
+        public async Task Put_ReturnsNoContentStatusCode_WhenSuccess()
         {
             //Arrange
             _dishDto.Id = 1;
 
             //Act
             var response = await _httpClient.PutAsJsonAsync("/api/Dish/1", _dishDto);
-            var result = await response.Content.ReadFromJsonAsync<DishDto>();
 
             //Assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-
-            Assert.NotNull(result);
-            Assert.Equal(_dishDto.Name, result.Name);
-            Assert.Equal(_dishDto.Id, result.Id);
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
         }
 
         [Fact]

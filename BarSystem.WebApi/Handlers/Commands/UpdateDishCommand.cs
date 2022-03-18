@@ -6,9 +6,9 @@ using MediatR;
 
 namespace BarSystem.WebApi.Handlers.Commands
 {
-    public record UpdateDishCommand(DishDto DishDto, int id) : IRequest<DishDto> { }
+    public record UpdateDishCommand(DishDto DishDto, int id) : IRequest<bool> { }
 
-    public class UpdateDishCommandHandler : IRequestHandler<UpdateDishCommand, DishDto>
+    public class UpdateDishCommandHandler : IRequestHandler<UpdateDishCommand, bool>
     {
         private readonly IDishRepository _dishRepository;
         private readonly IMapper _mapper;
@@ -19,23 +19,18 @@ namespace BarSystem.WebApi.Handlers.Commands
             _mapper = mapper;
         }
 
-        public async Task<DishDto> Handle(UpdateDishCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(UpdateDishCommand request, CancellationToken cancellationToken)
         {
-            var dniExist = await _dishRepository.EntityExistsAsync(request.id);
+            var entityExist = await _dishRepository.EntityExistsAsync(request.id);
 
-            if (!dniExist)
-                return null;
+            if (!entityExist)
+                return false;
 
             var dish = _mapper.Map<Dish>(request.DishDto);
 
             var dishUpdated = await _dishRepository.UpdateAsync(dish, request.id);
 
-            if (dishUpdated is null)
-                return null;
-
-            var dishDtoUpdated = _mapper.Map<DishDto>(dishUpdated);
-
-            return dishDtoUpdated;
+            return dishUpdated;
         }
     }
 }

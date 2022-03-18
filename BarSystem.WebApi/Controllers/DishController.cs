@@ -74,7 +74,7 @@ namespace BarSystem.WebApi.Controllers
         /// <response code="200">Returns the dish created</response>
         /// <response code="400">Invalid Dish</response>
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(DishDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Post([FromBody] DishDto dishDto)
         {
@@ -84,7 +84,7 @@ namespace BarSystem.WebApi.Controllers
             if (response == null)
                 return BadRequest();
 
-            return CreatedAtAction(nameof(Get), new { id = response.Id }, response);
+            return Ok(response);
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace BarSystem.WebApi.Controllers
         /// <response code="400">Invalid Dish</response>
         /// <response code="404">Dish not found</response>
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DishDto))]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Put([FromBody] DishDto dishDto, int id)
@@ -108,7 +108,7 @@ namespace BarSystem.WebApi.Controllers
             var query = new UpdateDishCommand(dishDto, id);
             var response = await _mediator.Send(query);
 
-            return response == null ? NotFound() : Ok(response);
+            return response == false ? NotFound() : NoContent();
         }
 
         /// <summary>

@@ -6,9 +6,9 @@ using MediatR;
 
 namespace BarSystem.WebApi.Handlers.Commands
 {
-    public record CreateEmployeeCommand(EmployeeDto EmployeeDto) : IRequest<EmployeeDto> { }
+    public record CreateEmployeeCommand(EmployeeDto EmployeeDto) : IRequest<int?> { }
 
-    public class CreateEmployeeCommandHandler : IRequestHandler<CreateEmployeeCommand, EmployeeDto>
+    public class CreateEmployeeCommandHandler : IRequestHandler<CreateEmployeeCommand, int?>
     {
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IMapper _mapper;
@@ -19,18 +19,13 @@ namespace BarSystem.WebApi.Handlers.Commands
             _mapper = mapper;
         }
 
-        public async Task<EmployeeDto> Handle(CreateEmployeeCommand request, CancellationToken cancellationToken)
+        public async Task<int?> Handle(CreateEmployeeCommand request, CancellationToken cancellationToken)
         {
             var employee = _mapper.Map<Employee>(request.EmployeeDto);
 
             var employeeCreated = await _employeeRepository.CreateAsync(employee);
 
-            if (employeeCreated == null)
-                return null;
-
-            var employeeDtoCreated = _mapper.Map<EmployeeDto>(employeeCreated);
-
-            return employeeDtoCreated;
+            return employeeCreated;
         }
     }
 }

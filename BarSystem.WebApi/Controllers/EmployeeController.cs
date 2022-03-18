@@ -71,7 +71,7 @@ namespace BarSystem.WebApi.Controllers
         /// <response code="201">Returns the employee created</response>
         /// <response code="400">Invalid Employee</response>
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(EmployeeDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Post([FromBody] EmployeeDto employeeDto)
         {
@@ -81,7 +81,7 @@ namespace BarSystem.WebApi.Controllers
             if (response == null)
                 return BadRequest();
 
-            return CreatedAtAction(nameof(Get), new { id = response.Id }, response);
+            return Ok(response);
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace BarSystem.WebApi.Controllers
         /// <response code="400">Invalid Employee</response>
         /// <response code="404">Employee not found</response>
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(EmployeeDto))]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Put([FromBody] EmployeeDto employeeDto, int id)
@@ -105,7 +105,7 @@ namespace BarSystem.WebApi.Controllers
             var query = new UpdateEmployeeCommand(employeeDto, id);
             var response = await _mediator.Send(query);
 
-            return response == null ? NotFound() : Ok(response);
+            return response == false ? NotFound() : NoContent();
         }
 
         /// <summary>

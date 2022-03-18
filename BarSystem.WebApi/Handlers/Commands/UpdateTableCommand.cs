@@ -6,9 +6,9 @@ using MediatR;
 
 namespace BarSystem.WebApi.Handlers.Commands
 {
-    public record UpdateTableCommand(TableDto TableDto, int id) : IRequest<TableInfoDto> { }
+    public record UpdateTableCommand(TableDto TableDto, int id) : IRequest<bool> { }
 
-    public class UpdateTableCommandHandler : IRequestHandler<UpdateTableCommand, TableInfoDto>
+    public class UpdateTableCommandHandler : IRequestHandler<UpdateTableCommand, bool>
     {
         private readonly ITableRepository _tableRepository;
         private readonly IDishRepository _dishRepository;
@@ -23,12 +23,12 @@ namespace BarSystem.WebApi.Handlers.Commands
             _mapper = mapper;
         }
 
-        public async Task<TableInfoDto> Handle(UpdateTableCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(UpdateTableCommand request, CancellationToken cancellationToken)
         {
-            var dniExist = await _tableRepository.EntityExistsAsync(request.id);
+            var entityExist = await _tableRepository.EntityExistsAsync(request.id);
 
-            if (!dniExist)
-                return null;
+            if (!entityExist)
+                return false;
 
             var table = _mapper.Map<Table>(request.TableDto);
 
@@ -46,12 +46,7 @@ namespace BarSystem.WebApi.Handlers.Commands
 
             var tableUpdated = await _tableRepository.UpdateAsync(table, request.id);
 
-            if (tableUpdated is null)
-                return null;
-
-            var tableDtoUpdated = _mapper.Map<TableInfoDto>(tableUpdated);
-
-            return tableDtoUpdated;
+            return tableUpdated;
         }
     }
 }

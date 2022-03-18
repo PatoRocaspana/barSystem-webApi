@@ -6,9 +6,9 @@ using MediatR;
 
 namespace BarSystem.WebApi.Handlers.Commands
 {
-    public record CreateDrinkCommand(DrinkDto DrinkDto) : IRequest<DrinkDto> { }
+    public record CreateDrinkCommand(DrinkDto DrinkDto) : IRequest<int?> { }
 
-    public class CreateDrinkCommandHandler : IRequestHandler<CreateDrinkCommand, DrinkDto>
+    public class CreateDrinkCommandHandler : IRequestHandler<CreateDrinkCommand, int?>
     {
         private readonly IDrinkRepository _drinkRepository;
         private readonly IMapper _mapper;
@@ -19,18 +19,13 @@ namespace BarSystem.WebApi.Handlers.Commands
             _mapper = mapper;
         }
 
-        public async Task<DrinkDto> Handle(CreateDrinkCommand request, CancellationToken cancellationToken)
+        public async Task<int?> Handle(CreateDrinkCommand request, CancellationToken cancellationToken)
         {
             var drink = _mapper.Map<Drink>(request.DrinkDto);
 
             var drinkCreated = await _drinkRepository.CreateAsync(drink);
 
-            if (drinkCreated == null)
-                return null;
-
-            var drinkDtoCreated = _mapper.Map<DrinkDto>(drinkCreated);
-
-            return drinkDtoCreated;
+            return drinkCreated;
         }
     }
 }

@@ -6,33 +6,33 @@ namespace BarSystem.WebApi.Data
 {
     public abstract class BaseRepository<T> : IBaseRepository<T> where T : Entity
     {
-        private readonly BarSystemDbContext _dbContext;
+        protected readonly BarSystemDbContext _dbContext;
 
         public BaseRepository(BarSystemDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public virtual async Task<T> CreateAsync(T entity)
+        public virtual async Task<int?> CreateAsync(T entity)
         {
             await _dbContext.Set<T>().AddAsync(entity);
             await _dbContext.SaveChangesAsync();
 
-            return entity;
+            return entity.Id;
         }
 
-        public virtual async Task<T> UpdateAsync(T entity, int id)
+        public virtual async Task<bool> UpdateAsync(T entity, int id)
         {
             var existingEntity = await GetAsync(id);
 
             if (existingEntity is null)
-                return null;
+                return false;
 
             UpdateEntity(existingEntity, entity);
 
             await _dbContext.SaveChangesAsync();
 
-            return existingEntity;
+            return true;
         }
 
         protected abstract void UpdateEntity(T existingEntity, T newEntity);

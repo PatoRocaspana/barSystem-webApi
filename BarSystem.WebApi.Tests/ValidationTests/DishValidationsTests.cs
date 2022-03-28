@@ -23,7 +23,20 @@ namespace BarSystem.WebApi.Tests.ValidationTests
         }
 
         [Fact]
-        public void Validation_ShouldHaveError_InvalidEnumCategory()
+        public void Validation_ShouldNotHaveError_DrinkCategoryIsValid()
+        {
+            //Arrange
+            _dishDto.Category = FoodCategory.ElaborateDish;
+
+            //Act
+            var result = _dishDtoValidator.TestValidate(_dishDto);
+
+            //Assert
+            result.ShouldNotHaveValidationErrorFor(dish => dish.Category);
+        }
+
+        [Fact]
+        public void Validation_ShouldHaveError_InvalidFoodCategory()
         {
             //Arrange
             _dishDto.Category = (FoodCategory)100;
@@ -54,7 +67,7 @@ namespace BarSystem.WebApi.Tests.ValidationTests
         [Theory]
         [InlineData(0)]
         [InlineData(150)]
-        public void Validation_ShouldNotHaveError_EstimatedTimeIsInOfRange(int minutes)
+        public void Validation_ShouldNotHaveError_EstimatedTimeIsWithinRange(int minutes)
         {
             //Arrange
             _dishDto.EstimatedTime = TimeSpan.FromMinutes(minutes);

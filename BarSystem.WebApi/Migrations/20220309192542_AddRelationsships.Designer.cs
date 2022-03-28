@@ -4,6 +4,7 @@ using BarSystem.WebApi.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BarSystem.WebApi.Migrations
 {
     [DbContext(typeof(BarSystemDbContext))]
-    partial class BarSystemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220309192542_AddRelationsships")]
+    partial class AddRelationsships
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,7 +57,7 @@ namespace BarSystem.WebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Dishes", (string)null);
+                    b.ToTable("Dishes");
                 });
 
             modelBuilder.Entity("BarSystem.WebApi.Models.Drink", b =>
@@ -85,7 +87,7 @@ namespace BarSystem.WebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Drinks", (string)null);
+                    b.ToTable("Drinks");
                 });
 
             modelBuilder.Entity("BarSystem.WebApi.Models.Employee", b =>
@@ -113,7 +115,7 @@ namespace BarSystem.WebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Employees", (string)null);
+                    b.ToTable("Employees");
                 });
 
             modelBuilder.Entity("BarSystem.WebApi.Models.Table", b =>
@@ -137,7 +139,7 @@ namespace BarSystem.WebApi.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.ToTable("Tables", (string)null);
+                    b.ToTable("Tables");
                 });
 
             modelBuilder.Entity("DishTable", b =>
@@ -152,7 +154,7 @@ namespace BarSystem.WebApi.Migrations
 
                     b.HasIndex("TablesId");
 
-                    b.ToTable("DishTable", (string)null);
+                    b.ToTable("DishTable");
                 });
 
             modelBuilder.Entity("DrinkTable", b =>
@@ -167,7 +169,7 @@ namespace BarSystem.WebApi.Migrations
 
                     b.HasIndex("TablesId");
 
-                    b.ToTable("DrinkTable", (string)null);
+                    b.ToTable("DrinkTable");
                 });
 
             modelBuilder.Entity("BarSystem.WebApi.Models.Table", b =>

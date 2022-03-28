@@ -1,5 +1,7 @@
 ﻿using BarSystem.WebApi.DTOs;
-using BarSystem.WebApi.Interfaces.Data;
+using BarSystem.WebApi.Handlers.Commands;
+using BarSystem.WebApi.Handlers.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BarSystem.WebApi.Controllers
@@ -8,11 +10,11 @@ namespace BarSystem.WebApi.Controllers
     [ApiController]
     public class EmployeeController : ControllerBase
     {
-        private readonly IEmployeeRepository _employeeRepository;
+        private readonly IMediator _mediator;
 
-        public EmployeeController(IEmployeeRepository employeeRepository)
+        public EmployeeController(IMediator mediator)
         {
-            _employeeRepository = employeeRepository;
+            _mediator = mediator;
         }
 
         /// <summary>
@@ -26,15 +28,10 @@ namespace BarSystem.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Get()
         {
-            var employeeEntityList = await _employeeRepository.GetAllAsync();
+            var query = new GetAllEmployeesQuery();
+            var response = await _mediator.Send(query);
 
-            if (employeeEntityList is null)
-                return NotFound();
-
-            var employeeDtoList = employeeEntityList.Select(employeeEntity => new EmployeeDto(employeeEntity))
-                                            .ToList();
-
-            return Ok(employeeDtoList);
+            return response == null ? NotFound() : Ok(response);
         }
 
         /// <summary>
@@ -49,14 +46,10 @@ namespace BarSystem.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Get(int id)
         {
-            var employeeEntity = await _employeeRepository.GetAsync(id);
+            var query = new GetEmployeeByIdQuery(id);
+            var response = await _mediator.Send(query);
 
-            if (employeeEntity == null)
-                return NotFound();
-
-            var employeeDto = new EmployeeDto(employeeEntity);
-
-            return Ok(employeeDto);
+            return response == null ? NotFound() : Ok(response);
         }
 
         /// <summary>
@@ -78,20 +71,17 @@ namespace BarSystem.WebApi.Controllers
         /// <response code="201">Returns the employee created</response>
         /// <response code="400">Invalid Employee</response>
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(EmployeeDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Post([FromBody] EmployeeDto employeeDto)
         {
-            var employeeEntity = employeeDto.ToEmployeeEntity(employeeDto);
+            var command = new CreateEmployeeCommand(employeeDto);
+            var response = await _mediator.Send(command);
 
-            var employeeCreated = await _employeeRepository.CreateAsync(employeeEntity);
-
-            if (employeeCreated is null)
+            if (response == null)
                 return BadRequest();
 
-            var employeeDtoCreated = new EmployeeDto(employeeCreated);
-
-            return CreatedAtAction(nameof(Get), new { id = employeeDtoCreated.Id }, employeeDtoCreated);
+            return Ok(response);
         }
 
         /// <summary>
@@ -104,26 +94,18 @@ namespace BarSystem.WebApi.Controllers
         /// <response code="400">Invalid Employee</response>
         /// <response code="404">Employee not found</response>
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(EmployeeDto))]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Put([FromBody] EmployeeDto employeeDto, int id)
         {
-            var dniExist = await _employeeRepository.EntityExistsAsync(id);
+            if (employeeDto.Id != id)
+                return BadRequest();
 
-            if (!dniExist || employeeDto.Id != id)
-                return NotFound();
+            var query = new UpdateEmployeeCommand(employeeDto, id);
+            var response = await _mediator.Send(query);
 
-            var employeeEntity = employeeDto.ToEmployeeEntity(employeeDto);
-
-            var employeeUpdated = await _employeeRepository.UpdateAsync(employeeEntity, id);
-
-            if (employeeUpdated is null)
-                return NotFound();
-
-            var employeeDtoUpdated = new EmployeeDto(employeeUpdated);
-
-            return Ok(employeeDtoUpdated);
+            return response == false ? NotFound() : NoContent();
         }
 
         /// <summary>
@@ -137,12 +119,12 @@ namespace BarSystem.WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var employeeExists = await _employeeRepository.EntityExistsAsync(id);
+            var command = new DeleteEmployeeCommand(id);
+            var response = await _mediator.Send(command);
 
-            if (!employeeExists)
+            if (!response)
                 return NotFound();
 
-            await _employeeRepository.DeleteAsync(id);
             return NoContent();
         }
     }

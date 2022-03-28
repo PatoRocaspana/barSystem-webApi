@@ -9,5 +9,7 @@ namespace BarSystem.WebApi.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public Role Role { get; set; }
+
+        public List<Table> Tables { get; set; }
     }
 }

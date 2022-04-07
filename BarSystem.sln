@@ -5,7 +5,9 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BarSystem.WebApi", "BarSystem.WebApi\BarSystem.WebApi.csproj", "{90AC84FD-A9EF-44FF-AF1D-E9A54FA7B184}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarSystem.WebApi.Tests", "BarSystem.WebApi.Tests\BarSystem.WebApi.Tests.csproj", "{78E10C3F-63E4-4CC3-A2D0-09579485221B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BarSystem.WebApi.Tests", "BarSystem.WebApi.Tests\BarSystem.WebApi.Tests.csproj", "{78E10C3F-63E4-4CC3-A2D0-09579485221B}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{C23CBD88-D2EF-4BE7-B96E-0049A70E860D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{78E10C3F-63E4-4CC3-A2D0-09579485221B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78E10C3F-63E4-4CC3-A2D0-09579485221B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78E10C3F-63E4-4CC3-A2D0-09579485221B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C23CBD88-D2EF-4BE7-B96E-0049A70E860D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C23CBD88-D2EF-4BE7-B96E-0049A70E860D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C23CBD88-D2EF-4BE7-B96E-0049A70E860D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C23CBD88-D2EF-4BE7-B96E-0049A70E860D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

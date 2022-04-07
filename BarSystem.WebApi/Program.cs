@@ -23,7 +23,7 @@ builder.Services.AddControllers()
 
 builder.Services.AddDbContext<BarSystemDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Database"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("BarSystemDb"));
 });
 
 builder.Services.AddMediatR(typeof(Program));
@@ -35,7 +35,7 @@ builder.Services.AddSwaggerDocument(config =>
 {
     config.PostProcess = document =>
     {
-        document.Info.Version = "v1";
+        document.Info.Version = "v1.2";
         document.Info.Title = "BarSystem Api";
         document.Info.Description = "A simple ASP.NET Core web API with educational purpose";
         document.Info.TermsOfService = "None";
@@ -63,6 +63,11 @@ builder.Services.AddTransient<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddTransient<ITableRepository, TableRepository>();
 
 var app = builder.Build();
+
+using (IServiceScope scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+{
+    scope.ServiceProvider.GetService<BarSystemDbContext>().Database.Migrate();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

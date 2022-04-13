@@ -2,6 +2,7 @@
 using BarSystem.WebApi.Handlers.Commands;
 using BarSystem.WebApi.Handlers.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BarSystem.WebApi.Controllers
@@ -17,6 +18,9 @@ namespace BarSystem.WebApi.Controllers
             _mediator = mediator;
         }
 
+        //user: jane@example.com
+        //pass: jane@example.coM
+
         /// <summary>
         /// Get all possible dishes.
         /// </summary>
@@ -26,6 +30,7 @@ namespace BarSystem.WebApi.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<DishDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Authorize]
         public async Task<IActionResult> Get()
         {
             var query = new GetAllDishesQuery();
@@ -76,6 +81,7 @@ namespace BarSystem.WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Policy = "CreateAccess")]
         public async Task<IActionResult> Post([FromBody] DishDto dishDto)
         {
             var command = new CreateDishCommand(dishDto);
@@ -100,6 +106,7 @@ namespace BarSystem.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Authorize(Policy = "UpdateAccess")]
         public async Task<IActionResult> Put([FromBody] DishDto dishDto, int id)
         {
             if (dishDto.Id != id)
@@ -120,6 +127,7 @@ namespace BarSystem.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpDelete("{id}")]
+        [Authorize(Policy = "DeleteAccess")]
         public async Task<IActionResult> Delete(int id)
         {
             var command = new DeleteDishCommand(id);
